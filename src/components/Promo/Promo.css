@@ -1,10 +1,11 @@
 .promo {
-  min-height: calc(100vh - 74px);
+  box-sizing: border-box;
   background-color: #DDDEE3;
   background-image: url("../../images/main-bg.svg");
   background-position: calc(100% - 5.47%) calc(100% - 10.71%);
   background-repeat: no-repeat;
   background-size: 722px;
+  padding-bottom: 406px;
 }
 
 .promo__header {
@@ -20,7 +21,7 @@
   .promo {
     background-position: center calc(100% - 70px);
     background-size: 680px;
-    min-height: 844px;
+    padding-bottom: 440px;
   }
 
   .promo__header {
@@ -35,7 +36,7 @@
   .promo {
     background-position: center calc(100% - 40px);
     background-size: 680px;
-    min-height: 630px;
+    padding-bottom: 330px;
   }
 
   .promo__header {

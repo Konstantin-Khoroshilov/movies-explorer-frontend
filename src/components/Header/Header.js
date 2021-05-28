@@ -4,7 +4,7 @@ import "./Header.css";
 import logo from "../../images/logo.svg";
 
 function Header({ place }) {
-  if (place === "Promo") {
+  if (place === "Main") {
     return (
       <header className="header">
         <img className="header__logo" alt="Логотип" src={logo} />
@@ -15,6 +15,5 @@ function Header({ place }) {
       </header>
     );
   }
-  
 }
 export default Header;

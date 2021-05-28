@@ -1,0 +1,185 @@
+.about-me {
+  padding: 110px 70px;
+  background: #FAFAFA;
+}
+
+.about-me__self-information {
+  display: grid;
+  grid-template-columns: minmax(200px, 600px) 270px;
+  column-gap: 49px;
+  justify-content: space-between;
+  align-content: space-between;
+  margin: 66px 0 100px 0;
+}
+
+.about-me__name {
+  margin: 0 0 18px 0;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 1.16;
+  letter-spacing: -0.04em;
+}
+
+.about-me__job {
+  margin: 0 0 26px 0;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.11;
+}
+
+.about-me__summary {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.57;
+}
+
+.about-me__contacts {
+  margin: 0;
+  list-style-type: none;
+  padding: 0;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(2, min-content);
+  align-content: end;
+}
+
+.about-me__photo {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.about-me__contact {
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.21;
+}
+
+.about-me__contact:hover {
+  opacity: .7;
+}
+
+.about-me__portfolio-title {
+  margin: 0 0 50px 0;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.11;
+  color: #A0A0A0;
+}
+
+.about-me__project {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 19px;
+  font-size: 30px;
+  line-height: 1.67;
+  letter-spacing: -0.04em;
+}
+
+.about-me__project:hover {
+  opacity: .7;
+}
+
+.about-me__project:not(:last-of-type) {
+  border-bottom: 1px solid #E8E8E8;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 768px){
+  .about-me {
+    padding: 90px 50px;
+  }
+
+  .about-me__self-information {
+    grid-template-columns: minmax(200px, 364px) 255px;
+    margin: 66px 0 90px 0;
+  }
+
+  .about-me__name {
+    margin: 0 0 16px 0;
+    font-size: 40px;
+    line-height: 1;
+  }
+  
+  .about-me__job {
+    margin: 0 0 20px 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .about-me__summary {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .about-me__project {
+    font-size: 28px;
+    line-height: 1.79;
+  }
+}
+
+@media screen and (max-width: 610px){
+  .about-me__self-information {
+    grid-template-columns: 45% 45%;
+    gap: 10%;
+  }
+}
+
+@media screen and (max-width: 450px){
+  .about-me {
+    padding: 70px 14px;
+  }
+
+  .about-me__self-information {
+    grid-template-columns: 100%;
+    margin: 60px 0 70px 0;
+    row-gap: 40px;
+  }
+  
+  .about-me__name {
+    margin: 0 0 20px 0;
+    font-size: 30px;
+    line-height: 1.2;
+  }
+
+  .about-me__job {
+    margin: 0 0 20px 0;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .about-me__summary {
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .about-me__contacts {
+    gap: 26px;
+  }
+
+  .about-me__photo {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+  }
+
+  .about-me__portfolio-title {
+    margin: 0 0 40px 0;
+    font-size: 14px;
+    line-height: 1.43;
+  }
+
+  .about-me__project {
+    font-size: 18px;
+    line-height: 1.56;
+  }
+}

@@ -28,6 +28,10 @@
   margin-right: 30px;
 }
 
+.header__register-link:hover {
+  opacity: .7;
+}
+
 .header__login-link {
   width: 76px;
   height: 32px;
@@ -41,6 +45,10 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
+}
+
+.header__login-link:hover {
+  opacity: .8;
 }
 
 @media screen and (max-width: 768px){
