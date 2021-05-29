@@ -34,9 +34,6 @@
 }
 
 .about-me__contacts {
-  margin: 0;
-  list-style-type: none;
-  padding: 0;
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(2, min-content);

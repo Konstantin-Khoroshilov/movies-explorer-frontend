@@ -1,4 +1,5 @@
 import React from "react";
+import "../../utils/shared.css";
 import "./Footer.css";
 
 function Footer() {
@@ -8,7 +9,7 @@ function Footer() {
       <div className="footer__content">
         <p className="footer__copyright">&copy;2021</p>
         <nav>
-          <ul className="footer__links">
+          <ul className="footer__links elements-list">
             <li>
               <a
                 href="https://praktikum.yandex.ru/"

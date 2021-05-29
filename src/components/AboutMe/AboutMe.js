@@ -19,7 +19,7 @@ function AboutMe() {
           </p>
         </div>
         <img className="about-me__photo" alt="Фото студента" src={student} />
-        <ul className="about-me__contacts">
+        <ul className="about-me__contacts elements-list">
           <li>
             <a
               href="https://www.facebook.com/"
