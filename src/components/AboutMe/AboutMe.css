@@ -50,15 +50,9 @@
 }
 
 .about-me__contact {
-  text-decoration: none;
-  color: black;
   font-weight: 500;
   font-size: 14px;
   line-height: 1.21;
-}
-
-.about-me__contact:hover {
-  opacity: .7;
 }
 
 .about-me__portfolio-title {
@@ -70,8 +64,6 @@
 }
 
 .about-me__project {
-  text-decoration: none;
-  color: black;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -79,10 +71,6 @@
   font-size: 30px;
   line-height: 1.67;
   letter-spacing: -0.04em;
-}
-
-.about-me__project:hover {
-  opacity: .7;
 }
 
 .about-me__project:not(:last-of-type) {

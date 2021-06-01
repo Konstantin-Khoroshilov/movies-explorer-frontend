@@ -23,7 +23,7 @@ function AboutMe() {
           <li>
             <a
               href="https://www.facebook.com/"
-              className="about-me__contact"
+              className="about-me__contact link"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -33,7 +33,7 @@ function AboutMe() {
           <li>
             <a
               href="https://github.com/Konstantin-Khoroshilov/"
-              className="about-me__contact"
+              className="about-me__contact link"
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -45,7 +45,7 @@ function AboutMe() {
       <h3 className="about-me__portfolio-title">Портфолио</h3>
       <a
         href="https://konstantin-khoroshilov.github.io/how-to-learn/"
-        className="about-me__project"
+        className="about-me__project link"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -54,7 +54,7 @@ function AboutMe() {
       </a>
       <a
         href="https://konstantin-khoroshilov.github.io/russian-travel/"
-        className="about-me__project"
+        className="about-me__project link"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -63,7 +63,7 @@ function AboutMe() {
       </a>
       <a
         href="https://oneofthebest.students.nomoredomains.icu/"
-        className="about-me__project"
+        className="about-me__project link"
         target="_blank"
         rel="noopener noreferrer"
       >

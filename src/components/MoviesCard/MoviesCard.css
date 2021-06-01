@@ -1,0 +1,116 @@
+.movies-list__movie {
+  background: #FFFFFF;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.movies-list__movie-caption {
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+}
+
+.movies-list__movie-name {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.2;
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movies-list__movie-duration {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70px;
+  font-size: 13px;
+  line-height: 1.38;
+  color: #A0A0A0;
+}
+
+.movies-list__movie-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.movies-list__button {
+  margin: 18px 0;
+  width: 100px;
+  height: 29px;
+  border-radius: 30px;
+  align-self: center;
+  background: #F4F4F4;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: .92;
+  position: relative;
+}
+
+.movies-list__button_type_saved {
+  background: #EE3465;
+}
+
+.movies-list__check-button {
+  display: block;
+  width: 6px;
+  height: 3px;
+  border-right: 1.5px solid white;
+  border-top: 1.5px solid white;
+  transform: rotate(135deg);
+  margin: 0 auto;
+  margin-top: -3px;
+}
+
+.movies-list__button_type_delete {
+  background-image: url("../../images/close-icon.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+@media screen and (max-width: 768px) {
+  .movies-list__movie-name {
+    max-width: 224px;
+  }
+
+  .movies-list__movie-image {
+    height: 190px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .movies-list__movie-caption {
+    padding: 14px;
+  }
+
+  .movies-list__movie-name {
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 200px;
+  }
+  .movies-list__movie-duration {
+    max-width: 50px;
+    font-size: 10px;
+    line-height: 1.8;
+  }
+
+  .movies-list__movie-image {
+    height: 168px;
+  }
+
+  .movies-list__button {
+    margin: 14px 0;
+  }
+
+  .movies-list__saved-button {
+    margin: 14px 0;
+  }
+}

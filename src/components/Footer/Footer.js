@@ -13,7 +13,7 @@ function Footer() {
             <li>
               <a
                 href="https://praktikum.yandex.ru/"
-                className="footer__link"
+                className="footer__link link"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -23,7 +23,7 @@ function Footer() {
             <li>
               <a
                 href="https://github.com/"
-                className="footer__link"
+                className="footer__link link"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -33,7 +33,7 @@ function Footer() {
             <li>
               <a
                 href="https://www.facebook.com/"
-                className="footer__link"
+                className="footer__link link"
                 target="_blank"
                 rel="noopener noreferrer"
               >

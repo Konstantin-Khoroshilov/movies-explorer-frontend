@@ -17,38 +17,20 @@
   font-weight: 500;
   font-size: 13px;
   line-height: 1.38;
-  text-decoration: none;
-  color: black;
   margin-right: 16px;
 }
 
-.header__movies:hover {
-  opacity: .7;
-}
-
 .header__saved-movies {
-  text-decoration: none;
   font-size: 13px;
   line-height: 1.38;
-  color: black;
-}
-
-.header__saved-movies:hover {
-  opacity: .7;
 }
 
 .header__profile {
   font-weight: 500;
   font-size: 14px;
   line-height: 1.14;
-  text-decoration: none;
-  color: black;
   display: flex;
   align-items: center;
-}
-
-.header__profile:hover {
-  opacity: .7;
 }
 
 .header__profile-icon {
@@ -78,13 +60,7 @@
   font-size: 12px;
   font-weight: 500;
   line-height: 1.33;
-  text-decoration: none;
-  color: black;
   margin-right: 30px;
-}
-
-.header__register-link:hover {
-  opacity: .7;
 }
 
 .header__login-link {
@@ -100,10 +76,6 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
-}
-
-.header__login-link:hover {
-  opacity: .8;
 }
 
 .header__burger {

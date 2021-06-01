@@ -7,9 +7,9 @@ function SearchForm() {
     <form className="search-form">
       <label className="search-form__search-string">
         <input className="search-form__text" type="text" placeholder="Фильм" />
-        <button className="search-form__submit" type="submit"><span className="search-form__button"></span></button>
+        <button className="search-form__submit button" type="submit"><span className="search-form__button"></span></button>
       </label>
-      <label className="search-form__short-films" tabindex="0">
+      <label className="search-form__short-films" tabIndex="0">
         <div className="switch">
           <input type="checkbox" defaultChecked />
           <span className="slider round"></span>
