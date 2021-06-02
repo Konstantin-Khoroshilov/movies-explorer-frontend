@@ -1,4 +1,5 @@
 import React from "react";
+import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import "../../vendor/styles/normalize.css";
 import "../../vendor/fonts/fonts.css";
@@ -9,7 +10,6 @@ import Login from "../Login/Login";
 import NotFound from "../NotFound/NotFound";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
-import { Route, Switch } from "react-router-dom";
 
 function App() {
   const [navigationVisible, setNavigationVisible] = React.useState(false);
