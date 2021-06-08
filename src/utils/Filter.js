@@ -1,9 +1,16 @@
-module.exports.getFilteredData = (filter, data) => {
-  return data.filter((item, index, array) => {
+module.exports.getFilteredData = ({searchQuery, switchOn}, data) => {
+  const filteredMOvies = data.filter((item, index, array) => {
     return Object.values(item).some((item, index, array) => {
-      return typeof item === "string" ? item.toLowerCase().includes(filter.toLowerCase()) : false;
+      return typeof item === "string" ? item.toLowerCase().includes(searchQuery.toLowerCase()) : false;
     })
   });
+  if(switchOn) {
+    const shortMovies = filteredMOvies.filter((item, index, array) => {
+      return item.duration < 40;
+    });
+    return shortMovies;
+  }
+  return filteredMOvies;
 };
 
 module.exports.getVisibleData = (filtered) => {

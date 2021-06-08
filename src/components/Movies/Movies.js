@@ -17,7 +17,11 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick }) {
   const [data, setData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [visibleData, setVisibleData] = React.useState([]);
+  const [switchOn, setSwitchOn] = React.useState(false);
 
+  const onSwitch = () => {
+    setSwitchOn(!switchOn);
+  }
 
   const onSearchQueryChange = (evt) => {
     setSearchQuery(evt.target.value);
@@ -29,8 +33,8 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick }) {
     if (searchQuery === '') {
       setSearchResult('emptyQuery');
     } else if (data.length !== 0) {
-      setFilteredData(getFilteredData(searchQuery, data));
-      setVisibleData(getVisibleData(getFilteredData(searchQuery, data)));
+      setFilteredData(getFilteredData({searchQuery, switchOn}, data));
+      setVisibleData(getVisibleData(getFilteredData({searchQuery, switchOn}, data)));
       setSearchResult('success');
     } else {
       setSearchResult("fail");
@@ -67,16 +71,16 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick }) {
 
   React.useEffect(()=>{
     window.addEventListener('resize', ()=>{
-      setFilteredData(getFilteredData(searchQuery, data));
-      setVisibleData(getVisibleData(getFilteredData(searchQuery, data)));
+      setFilteredData(getFilteredData({searchQuery, switchOn}, data));
+      setVisibleData(getVisibleData(getFilteredData({searchQuery, switchOn}, data)));
       setSearchResult('success');
     })
-  }, [data, searchQuery]);
+  }, [data, searchQuery, switchOn]);
 
   return (
     <div className="page">
       <Header place="Movies" handleMenuClick={handleMenuClick} />
-      <SearchForm onSubmit={getMovies} onChange={onSearchQueryChange} />
+      <SearchForm onSubmit={getMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} />
       <section className="movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
         <div className={
