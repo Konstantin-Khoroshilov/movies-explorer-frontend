@@ -57,107 +57,20 @@ function App() {
       _id: 11,
     },
   ];
-  const movies = [
-    {
-      name: "В погоне за Бенкси. Бежим, бежим, бежим",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 1,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 2,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 3,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 4,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 5,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 6,
-    },
-    {
-      name: "В погоне за Бенкси. Бежим, бежим, бежим",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 7,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 8,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 9,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 10,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 11,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 12,
-    },
-  ];
+
   return (
     <Switch>
-      <Route exact path ="/">
+      <Route exact path="/">
         <Main />
       </Route>
-      <Route path ="/movies">
+      <Route path="/movies">
         <Movies
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
           handleMenuClick={handleMenuClick}
-          movies={movies}
-          cardsLoadStatus={cardsLoadStatus}
         />
       </Route>
-      <Route path ="/saved-movies">
+      <Route path="/saved-movies">
         <SavedMovies
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
@@ -166,17 +79,17 @@ function App() {
           cardsLoadStatus={cardsLoadStatus}
         />
       </Route>
-      <Route path ="/profile">
+      <Route path="/profile">
         <Profile
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
           handleMenuClick={handleMenuClick}
         />
       </Route>
-      <Route path ="/signin">
+      <Route path="/signin">
         <Login />
       </Route>
-      <Route path ="/signup">
+      <Route path="/signup">
         <Register />
       </Route>
       <Route path="*">

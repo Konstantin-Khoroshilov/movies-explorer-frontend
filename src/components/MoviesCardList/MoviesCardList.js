@@ -7,15 +7,15 @@ function MoviesCardList({ movies, component }) {
   return (
     <div className="movies-list">
       <ul className="movies-list__container elements-list">
-          {movies.map((movie) => {
-            return (
-              <MoviesCard
-                component={component}
-                movie={movie}
-                key={movie._id}
-              />
-            );
-          })}
+        {movies.map((movie) => {
+          return (
+            <MoviesCard
+              component={component}
+              movie={movie}
+              key={movie.id}
+            />
+          );
+        })}
       </ul>
     </div>
   );
