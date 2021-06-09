@@ -47,6 +47,11 @@
   background-color: #FAFAFA;
   font-size: 14px;
   line-height: 1.2;
+  padding: 0;
+}
+
+.register-form__text-input {
+  padding: 0;
 }
 
 .register-form__error-message-container {

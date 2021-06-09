@@ -45,6 +45,7 @@ function Register() {
             <span className="register-form__input-name">Имя</span>
             <input
               type="text"
+              placeholder="Имя"
               className={
                 nameIsValid
                   ? "register-form__text-input"
@@ -64,6 +65,7 @@ function Register() {
             <span className="register-form__input-name">E-mail</span>
             <input
               type="email"
+              placeholder="E-mail"
               className={
                 emailIsValid
                   ? "register-form__text-input"
@@ -81,6 +83,7 @@ function Register() {
             <span className="register-form__input-name">Пароль</span>
             <input
               type="password"
+              placeholder="Пароль"
               minLength="8"
               maxLength="30"
               className={

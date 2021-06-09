@@ -3,7 +3,7 @@ class Api {
     this._moviesUrl = options.moviesUrl;
   }
 
-  getMovies(token) {
+  getMovies() {
     return fetch(this._moviesUrl)
       .then((res) => {
         if (res.ok) {
@@ -18,7 +18,7 @@ class Api {
 }
 
 const apiData = {
-  moviesUrl: "https://api.nomoreparties.co/beatfilm-movie",
+  moviesUrl: "https://api.nomoreparties.co/beatfilm-movies",
 };
 
 const moviesApi = new Api(apiData);

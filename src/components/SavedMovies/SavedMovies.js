@@ -12,7 +12,7 @@ function SavedMovies({
   navigationVisible,
   handleCloseClick,
   handleMenuClick,
-  movies,
+  savedMovies,
   cardsLoadStatus
 }) {
   return (
@@ -22,7 +22,7 @@ function SavedMovies({
       <section className="saved-movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
         {cardsLoadStatus === "success"
-          ? (<MoviesCardList movies={movies} component="SavedMovies" />)
+          ? (<MoviesCardList movies={savedMovies} component="SavedMovies" />)
           : cardsLoadStatus === "inProcess"
           ? (<Preloader />)
           : (<h2>Не удалось загрузить данные с сервера.</h2>)

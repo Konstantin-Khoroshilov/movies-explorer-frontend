@@ -37,6 +37,7 @@ function Login() {
           <label className="login-form__form-field">
             <span className="login-form__input-name">E-mail</span>
             <input
+              placeholder="E-mail"
               type="email"
               className={
                 emailIsValid
@@ -54,6 +55,7 @@ function Login() {
           <label className="login-form__form-field">
             <span className="login-form__input-name">Пароль</span>
             <input
+              placeholder="Пароль"
               type="password"
               minLength="8"
               maxLength="30"

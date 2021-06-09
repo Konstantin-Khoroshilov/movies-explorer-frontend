@@ -1,10 +1,10 @@
-module.exports.getFilteredData = ({searchQuery, switchOn}, data) => {
+module.exports.getFilteredData = ({ searchQuery, switchOn }, data) => {
   const filteredMOvies = data.filter((item, index, array) => {
     return Object.values(item).some((item, index, array) => {
       return typeof item === "string" ? item.toLowerCase().includes(searchQuery.toLowerCase()) : false;
-    })
+    });
   });
-  if(switchOn) {
+  if (switchOn) {
     const shortMovies = filteredMOvies.filter((item, index, array) => {
       return item.duration <= 40;
     });

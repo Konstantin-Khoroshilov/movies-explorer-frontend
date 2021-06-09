@@ -26,35 +26,35 @@ function App() {
       duration: "27 минут",
       image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
       saved: true,
-      _id: 1,
+      id: 1,
     },
     {
       name: "В погоне за Бенкси",
       duration: "27 минут",
       image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
       saved: true,
-      _id: 2,
+      id: 2,
     },
     {
       name: "В погоне за Бенкси",
       duration: "27 минут",
       image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
       saved: true,
-      _id: 6,
+      id: 6,
     },
     {
       name: "В погоне за Бенкси. Бежим, бежим, бежим",
       duration: "27 минут",
       image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
       saved: true,
-      _id: 7,
+      id: 7,
     },
     {
       name: "В погоне за Бенкси",
       duration: "27 минут",
       image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
       saved: true,
-      _id: 11,
+      id: 11,
     },
   ];
     
@@ -73,6 +73,7 @@ function App() {
             ? JSON.parse(localStorage.getItem("movies"))
             : false
           }
+          savedMovies={savedMovies}
         />
       </Route>
       <Route path="/saved-movies">
@@ -80,7 +81,7 @@ function App() {
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
           handleMenuClick={handleMenuClick}
-          movies={savedMovies}
+          savedMovies={savedMovies}
           cardsLoadStatus={cardsLoadStatus}
         />
       </Route>

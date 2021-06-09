@@ -39,6 +39,7 @@ function Profile({ navigationVisible, handleCloseClick, handleMenuClick }) {
             <span className="profile-form__input-name">Имя</span>
             <input
               type="text"
+              placeholder="Имя"
               className={
                 nameIsValid
                   ? "profile-form__text-input"
@@ -58,6 +59,7 @@ function Profile({ navigationVisible, handleCloseClick, handleMenuClick }) {
             <span className="profile-form__input-name">E-mail</span>
             <input
               type="email"
+              placeholder="E-mail"
               className={
                 emailIsValid
                   ? "profile-form__text-input"

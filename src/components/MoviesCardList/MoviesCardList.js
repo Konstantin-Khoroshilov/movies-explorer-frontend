@@ -1,9 +1,9 @@
 import React from "react";
 import "./MoviesCardList.css";
 import "../../utils/shared.css";
-import MoviesCard from "../../components/MoviesCard/MoviesCard"
+import MoviesCard from "../../components/MoviesCard/MoviesCard";
 
-function MoviesCardList({ movies, component }) {
+function MoviesCardList({ movies, component, savedMovies}) {
   return (
     <div className="movies-list">
       <ul className="movies-list__container elements-list">
@@ -12,6 +12,13 @@ function MoviesCardList({ movies, component }) {
             <MoviesCard
               component={component}
               movie={movie}
+              movieSaved={
+                component === "Movies"
+                ? savedMovies.some((item) => {
+                return item.id === movie.id;
+              })
+              : true
+            }
               key={movie.id}
             />
           );

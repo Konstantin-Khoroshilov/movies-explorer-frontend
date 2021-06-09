@@ -10,7 +10,7 @@ import Preloader from "../Preloader/Preloader";
 import moviesApi from "../../utils/MoviesApi";
 import { getFilteredData, getVisibleData } from "../../utils/Filter";
 
-function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedData }) {
+function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedData, savedMovies }) {
   const [searchResult, setSearchResult] = React.useState("notStarted");
   const [searchStatus, setSearchStatus] = React.useState("notStarted");
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -88,7 +88,13 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   React.useEffect(() => {
     setFilteredData(getFilteredData({ searchQuery, switchOn }, data));
     setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
-    setSearchResult("success");
+    if (getFilteredData({ searchQuery, switchOn }, data).length === 0) {
+      setSearchResult("emptyResult");
+    } else if (searchQuery === '') {
+      setSearchResult("emptyQuery");
+    } else {
+      setSearchResult("success");
+    }
   }, [switchOn]);
 
   return (
@@ -110,7 +116,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
                 : searchResult === "success"
                   ? (
                     <>
-                      <MoviesCardList movies={visibleData} component="Movies" />
+                      <MoviesCardList movies={visibleData} component="Movies" savedMovies={savedMovies} />
                       <button
                         className={
                           visibleData.length < filteredData.length
