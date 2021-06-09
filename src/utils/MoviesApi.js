@@ -18,7 +18,7 @@ class Api {
 }
 
 const apiData = {
-  moviesUrl: "https://api.nomoreparties.co/beatfilm-movies",
+  moviesUrl: "https://api.nomoreparties.co/beatfilm-movie",
 };
 
 const moviesApi = new Api(apiData);

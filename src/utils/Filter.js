@@ -6,7 +6,7 @@ module.exports.getFilteredData = ({searchQuery, switchOn}, data) => {
   });
   if(switchOn) {
     const shortMovies = filteredMOvies.filter((item, index, array) => {
-      return item.duration < 40;
+      return item.duration <= 40;
     });
     return shortMovies;
   }

@@ -10,10 +10,10 @@ import Preloader from "../Preloader/Preloader";
 import moviesApi from "../../utils/MoviesApi";
 import { getFilteredData, getVisibleData } from "../../utils/Filter";
 
-function Movies({ navigationVisible, handleCloseClick, handleMenuClick }) {
-  const [searchResult, setSearchResult] = React.useState('notStarted');
-  const [searchStatus, setSearchStatus] = React.useState('notStarted');
-  const [searchQuery, setSearchQuery] = React.useState('');
+function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedData }) {
+  const [searchResult, setSearchResult] = React.useState("notStarted");
+  const [searchStatus, setSearchStatus] = React.useState("notStarted");
+  const [searchQuery, setSearchQuery] = React.useState("");
   const [data, setData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [visibleData, setVisibleData] = React.useState([]);
@@ -23,21 +23,45 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick }) {
     setSwitchOn(!switchOn);
   }
 
+  const render = (items) => {
+    setFilteredData(getFilteredData({ searchQuery, switchOn }, items));
+    if (getFilteredData({ searchQuery, switchOn }, items).length === 0) {
+      setSearchStatus('started');
+      setSearchResult('emptyResult');
+    } else {
+      setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, items)));
+      setSearchStatus('started');
+      setSearchResult('success');
+    }
+  }
+
   const onSearchQueryChange = (evt) => {
     setSearchQuery(evt.target.value);
   }
 
   const getMovies = (evt) => {
-    setSearchStatus('started');
     evt.preventDefault();
-    if (searchQuery === '') {
+    if (searchQuery === "") {
+      setSearchStatus('started');
       setSearchResult('emptyQuery');
-    } else if (data.length !== 0) {
-      setFilteredData(getFilteredData({searchQuery, switchOn}, data));
-      setVisibleData(getVisibleData(getFilteredData({searchQuery, switchOn}, data)));
-      setSearchResult('success');
     } else {
-      setSearchResult("fail");
+      if (storedData) {
+        setData(storedData);
+        render(storedData);
+      } else if (data.length !== 0) {
+        render(data);
+      } else {
+        setSearchStatus('started');
+        setSearchResult("inProcess");
+        moviesApi.getMovies()
+          .then((movies) => {
+            localStorage.setItem("movies", JSON.stringify(movies));
+            setData(movies);
+            render(movies);
+          }).catch(() => {
+            setSearchResult("fail");
+          });
+      }
     }
   }
 
@@ -54,28 +78,18 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick }) {
   }
 
   React.useEffect(() => {
-    if (JSON.parse(localStorage.getItem('movies'))) {
-      setData(JSON.parse(localStorage.getItem('movies')))
-    } else {
-      setSearchResult('inProcess');
-      moviesApi.getMovies()
-        .then((movies) => {
-          localStorage.setItem('movies', JSON.stringify(movies));
-          setData(movies);
-          setSearchResult('success');
-        }).catch(() => {
-          setSearchResult("fail");
-        });
-    }
-  }, []);
-
-  React.useEffect(()=>{
-    window.addEventListener('resize', ()=>{
-      setFilteredData(getFilteredData({searchQuery, switchOn}, data));
-      setVisibleData(getVisibleData(getFilteredData({searchQuery, switchOn}, data)));
-      setSearchResult('success');
+    window.addEventListener("resize", () => {
+      setFilteredData(getFilteredData({ searchQuery, switchOn }, data));
+      setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
+      setSearchResult("success");
     })
   }, [data, searchQuery, switchOn]);
+
+  React.useEffect(() => {
+    setFilteredData(getFilteredData({ searchQuery, switchOn }, data));
+    setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
+    setSearchResult("success");
+  }, [switchOn]);
 
   return (
     <div className="page">
@@ -84,15 +98,15 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick }) {
       <section className="movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
         <div className={
-          searchStatus === 'started'
+          searchStatus === "started"
             ? "movies__search-result"
             : "movies__search-result movies__search-result_hidden"
         }>
           {
             searchResult === "emptyQuery"
-              ? (<h2>Нужно ввести ключевое слово</h2>)
-              : filteredData.length === 0
-                ? (<h2>Ничего не найдено</h2>)
+              ? (<h2 className="movies__search-status">Нужно ввести ключевое слово</h2>)
+              : searchResult === "emptyResult"
+                ? (<h2 className="movies__search-status">Ничего не найдено</h2>)
                 : searchResult === "success"
                   ? (
                     <>
@@ -110,8 +124,8 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick }) {
                   : searchResult === "inProcess"
                     ? (<Preloader />)
                     : searchResult === "invalidInput"
-                      ? (<h2>Неверные параметры поиска</h2>)
-                      : (<h2>
+                      ? (<h2 className="movies__search-status">Неверные параметры поиска</h2>)
+                      : (<h2 className="movies__search-status">
                         Во время запроса произошла ошибка.
                         Возможно, проблема с соединением или сервер недоступен.
                         Подождите немного и попробуйте ещё раз

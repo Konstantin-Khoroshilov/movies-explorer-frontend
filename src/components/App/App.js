@@ -57,7 +57,7 @@ function App() {
       _id: 11,
     },
   ];
-
+    
   return (
     <Switch>
       <Route exact path="/">
@@ -68,6 +68,11 @@ function App() {
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
           handleMenuClick={handleMenuClick}
+          storedData={
+            JSON.parse(localStorage.getItem("movies"))
+            ? JSON.parse(localStorage.getItem("movies"))
+            : false
+          }
         />
       </Route>
       <Route path="/saved-movies">
