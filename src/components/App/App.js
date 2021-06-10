@@ -20,7 +20,6 @@ function App() {
     setNavigationVisible(true);
   }
   
-    
   return (
     <Switch>
       <Route exact path="/">

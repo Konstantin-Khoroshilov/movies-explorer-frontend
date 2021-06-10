@@ -3,9 +3,24 @@
   background: #FAFAFA;
 }
 
+.saved-movies__search-status {
+  margin: 0;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.21;
+}
+
 @media screen and (max-width: 768px) {
   .saved-movies {
     padding: 70px 30px 170px 30px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .saved-movies__search-status {
+    font-size: 18px;
+    line-height: 1.22;
+    text-align: center;
   }
 }
 

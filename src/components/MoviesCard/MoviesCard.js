@@ -2,18 +2,18 @@ import React from "react";
 import "./MoviesCard.css";
 import cinemaIcon from "../../images/cinema-icon.svg";
 
-function MoviesCard({ movie, component, movieSaved, saveMovie }) {
+function MoviesCard({ movie, component, movieSaved, saveMovie, deleteMovie }) {
   const getTimeFromMins = (mins) => {
-    let hours = Math.trunc(mins/60);
-	  let minutes = mins % 60;
-    if(hours===0) {
+    let hours = Math.trunc(mins / 60);
+    let minutes = mins % 60;
+    if (hours === 0) {
       const minsDeclensions = ["минута", "минуты", "минут"];
-      const declOfNum = (number, words) => {  
+      const declOfNum = (number, words) => {
         return mins + " " + words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
       }
       return declOfNum(mins, minsDeclensions);
     }
-	  return hours + "ч " + minutes + "м";
+    return hours + "ч " + minutes + "м";
   };
   return (
     <li>
@@ -37,17 +37,14 @@ function MoviesCard({ movie, component, movieSaved, saveMovie }) {
         {component === "SavedMovies" ? (
           <button
             type="button"
-            className={
-              movieSaved
-              ? "movies-list__button movies-list__button_type_delete button"
-              : "movies-list__button button"
-            }
-          >{movieSaved ? "" : "Сохранить" }</button>
+            className="movies-list__button movies-list__button_type_delete button"
+            onClick={(evt) => { deleteMovie(evt, movie) }}
+          ></button>
         ) : !movieSaved ? (
           <input
             type="button"
             className="movies-list__button button"
-            onClick={(evt)=>{saveMovie(evt, movie)}}
+            onClick={(evt) => { saveMovie(evt, movie) }}
             value="Сохранить"
           ></input>
         ) : (

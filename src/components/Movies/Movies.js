@@ -23,8 +23,6 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   const [savedMoviesLoadStatus, setSavedMoviesLoadStatus] = React.useState('inProcess');
 
   const saveMovie = (evt, movie) => {
-    console.log(evt.target)
-    console.log(movie)
     evt.target.value = "...";
     mainApi.addNewMovie(
       movie.country,
