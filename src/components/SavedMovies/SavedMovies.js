@@ -22,14 +22,14 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick }) {
     evt.target.className = "movies-list__button";
     evt.target.value = "...";
     mainApi.deleteMovie(movie.id)
-    .then(() => {
-      setSavedMovies(savedMovies.map((item, index, array) => {
-        return item.id !== movie.id ? true : false;
-      }));
-    }).catch(() => {
-      evt.target.className = "movies-list__button";
-      evt.target.value = "movies-list__button movies-list__button_type_delete button";
-    });
+      .then(() => {
+        setSavedMovies(savedMovies.map((item, index, array) => {
+          return item.id !== movie.id ? true : false;
+        }));
+      }).catch(() => {
+        evt.target.className = "movies-list__button movies-list__button_type_delete button";
+        evt.target.value = "";
+      });
   }
 
   const filterMovies = (evt) => {

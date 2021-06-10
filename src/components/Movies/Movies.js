@@ -23,26 +23,39 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   const [savedMoviesLoadStatus, setSavedMoviesLoadStatus] = React.useState('inProcess');
 
   const saveMovie = (evt, movie) => {
-    evt.target.value = "...";
-    mainApi.addNewMovie(
-      movie.country,
-      movie.director,
-      movie.duration,
-      movie.year,
-      movie.description,
-      `https://api.nomoreparties.co${movie.image.url}`,
-      movie.trailer = movie.trailerLink,
-      movie.nameRU,
-      movie.nameEN,
-      `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
-      `${movie.id}`,
-    )
-      .then(() => {
-        evt.target.value = "";
-        evt.target.className = "movies-list__button movies-list__button_type_saved button";
-      }).catch(() => {
-        evt.target.value = "Сохранить";
-      })
+    if (!evt.target.value.classList.contains("movies-list__button_type_saved")) {
+      evt.target.value = "...";
+      mainApi.addNewMovie(
+        movie.country,
+        movie.director,
+        movie.duration,
+        movie.year,
+        movie.description,
+        `https://api.nomoreparties.co${movie.image.url}`,
+        movie.trailer = movie.trailerLink,
+        movie.nameRU,
+        movie.nameEN,
+        `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
+        `${movie.id}`,
+      )
+        .then(() => {
+          evt.target.value = "";
+          evt.target.className = "movies-list__button movies-list__button_type_saved button";
+        }).catch(() => {
+          evt.target.value = "Сохранить";
+        })
+    } else {
+      evt.target.className = "movies-list__button";
+      evt.target.value = "...";
+      mainApi.deleteMovie(movie.id)
+        .then(() => {
+          evt.target.className = "movies-list__button button";
+          evt.target.value = "Сохранить";
+        }).catch(() => {
+          evt.target.className = "movies-list__button movies-list__button_type_saved button";
+          evt.target.value = "";
+        });
+    }
   }
 
   React.useEffect(() => {
@@ -137,7 +150,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
       setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
       if (getFilteredData({ searchQuery, switchOn }, data).length === 0) {
         setSearchResult("emptyResult");
-      } else if (searchQuery === '') {
+      } else if (searchQuery === "") {
         setSearchResult("emptyQuery");
       } else {
         setSearchResult(searchResult);
