@@ -8,9 +8,10 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
 import moviesApi from "../../utils/MoviesApi";
+import mainApi from "../../utils/MainApi";
 import { getFilteredData, getVisibleData } from "../../utils/Filter";
 
-function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedData, savedMovies }) {
+function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedData }) {
   const [searchResult, setSearchResult] = React.useState("notStarted");
   const [searchStatus, setSearchStatus] = React.useState("notStarted");
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -18,6 +19,43 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   const [filteredData, setFilteredData] = React.useState([]);
   const [visibleData, setVisibleData] = React.useState([]);
   const [switchOn, setSwitchOn] = React.useState(false);
+  const [savedMovies, setSavedMovies] = React.useState([]);
+  const [savedMoviesLoadStatus, setSavedMoviesLoadStatus] = React.useState('inProcess');
+
+  const saveMovie = (evt, movie) => {
+    console.log(evt.target)
+    console.log(movie)
+    evt.target.value = "...";
+    mainApi.addNewMovie(
+      movie.country,
+      movie.director,
+      movie.duration,
+      movie.year,
+      movie.description,
+      `https://api.nomoreparties.co${movie.image.url}`,
+      movie.trailer = movie.trailerLink,
+      movie.nameRU,
+      movie.nameEN,
+      `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
+      `${movie.id}`,
+    )
+      .then(() => {
+        evt.target.value = "";
+        evt.target.className = "movies-list__button movies-list__button_type_saved button";
+      }).catch(() => {
+        evt.target.value = "Сохранить";
+      })
+  }
+
+  React.useEffect(() => {
+    mainApi.getSavedMovies()
+      .then((savedMovies) => {
+        setSavedMovies(savedMovies);
+        setSavedMoviesLoadStatus('success');
+      }).catch(() => {
+        setSavedMoviesLoadStatus("fail");
+      });
+  }, []);
 
   const onSwitch = () => {
     setSwitchOn(!switchOn);
@@ -45,22 +83,30 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
       setSearchStatus('started');
       setSearchResult('emptyQuery');
     } else {
-      if (storedData) {
-        setData(storedData);
-        render(storedData);
-      } else if (data.length !== 0) {
-        render(data);
+      if (savedMoviesLoadStatus === 'inProcess') {
+        setSearchStatus('started');
+        setSearchResult('inProcess');
+      } else if (savedMoviesLoadStatus === "success") {
+        if (storedData) {
+          setData(storedData);
+          render(storedData);
+        } else if (data.length !== 0) {
+          render(data);
+        } else {
+          setSearchStatus('started');
+          setSearchResult("inProcess");
+          moviesApi.getMovies()
+            .then((movies) => {
+              localStorage.setItem("movies", JSON.stringify(movies));
+              setData(movies);
+              render(movies);
+            }).catch(() => {
+              setSearchResult("fail");
+            });
+        }
       } else {
         setSearchStatus('started');
-        setSearchResult("inProcess");
-        moviesApi.getMovies()
-          .then((movies) => {
-            localStorage.setItem("movies", JSON.stringify(movies));
-            setData(movies);
-            render(movies);
-          }).catch(() => {
-            setSearchResult("fail");
-          });
+        setSearchResult('fail');
       }
     }
   }
@@ -78,24 +124,28 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   }
 
   React.useEffect(() => {
-    window.addEventListener("resize", () => {
-      setFilteredData(getFilteredData({ searchQuery, switchOn }, data));
-      setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
-      setSearchResult("success");
-    })
-  }, [data, searchQuery, switchOn]);
+    if (savedMoviesLoadStatus === "success") {
+      window.addEventListener("resize", () => {
+        setFilteredData(getFilteredData({ searchQuery, switchOn }, data));
+        setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
+        setSearchResult("success");
+      })
+    }
+  }, [data, searchQuery, switchOn, savedMoviesLoadStatus]);
 
   React.useEffect(() => {
-    setFilteredData(getFilteredData({ searchQuery, switchOn }, data));
-    setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
-    if (getFilteredData({ searchQuery, switchOn }, data).length === 0) {
-      setSearchResult("emptyResult");
-    } else if (searchQuery === '') {
-      setSearchResult("emptyQuery");
-    } else {
-      setSearchResult("success");
+    if (savedMoviesLoadStatus === "success") {
+      setFilteredData(getFilteredData({ searchQuery, switchOn }, data));
+      setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
+      if (getFilteredData({ searchQuery, switchOn }, data).length === 0) {
+        setSearchResult("emptyResult");
+      } else if (searchQuery === '') {
+        setSearchResult("emptyQuery");
+      } else {
+        setSearchResult(searchResult);
+      }
     }
-  }, [switchOn]);
+  }, [switchOn, savedMoviesLoadStatus]);
 
   return (
     <div className="page">
@@ -116,7 +166,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
                 : searchResult === "success"
                   ? (
                     <>
-                      <MoviesCardList movies={visibleData} component="Movies" savedMovies={savedMovies} />
+                      <MoviesCardList movies={visibleData} component="Movies" savedMovies={savedMovies} saveMovie={saveMovie} />
                       <button
                         className={
                           visibleData.length < filteredData.length

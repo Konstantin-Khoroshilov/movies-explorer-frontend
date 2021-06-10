@@ -2,7 +2,7 @@ import React from "react";
 import "./MoviesCard.css";
 import cinemaIcon from "../../images/cinema-icon.svg";
 
-function MoviesCard({ movie, component, movieSaved }) {
+function MoviesCard({ movie, component, movieSaved, saveMovie }) {
   const getTimeFromMins = (mins) => {
     let hours = Math.trunc(mins/60);
 	  let minutes = mins % 60;
@@ -44,10 +44,12 @@ function MoviesCard({ movie, component, movieSaved }) {
             }
           >{movieSaved ? "" : "Сохранить" }</button>
         ) : !movieSaved ? (
-          <button
+          <input
             type="button"
             className="movies-list__button button"
-          >Сохранить</button>
+            onClick={(evt)=>{saveMovie(evt, movie)}}
+            value="Сохранить"
+          ></input>
         ) : (
           <button
             type="button"

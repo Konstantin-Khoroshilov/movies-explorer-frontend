@@ -19,44 +19,7 @@ function App() {
   const handleMenuClick = () => {
     setNavigationVisible(true);
   }
-  const cardsLoadStatus = "success";
-  const savedMovies = [
-    {
-      name: "В погоне за Бенкси. Бежим, бежим, бежим",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      id: 1,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      id: 2,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      id: 6,
-    },
-    {
-      name: "В погоне за Бенкси. Бежим, бежим, бежим",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      id: 7,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      id: 11,
-    },
-  ];
+  
     
   return (
     <Switch>
@@ -73,7 +36,6 @@ function App() {
             ? JSON.parse(localStorage.getItem("movies"))
             : false
           }
-          savedMovies={savedMovies}
         />
       </Route>
       <Route path="/saved-movies">
@@ -81,8 +43,6 @@ function App() {
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
           handleMenuClick={handleMenuClick}
-          savedMovies={savedMovies}
-          cardsLoadStatus={cardsLoadStatus}
         />
       </Route>
       <Route path="/profile">

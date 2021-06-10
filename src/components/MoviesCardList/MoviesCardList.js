@@ -3,7 +3,7 @@ import "./MoviesCardList.css";
 import "../../utils/shared.css";
 import MoviesCard from "../../components/MoviesCard/MoviesCard";
 
-function MoviesCardList({ movies, component, savedMovies}) {
+function MoviesCardList({ movies, component, savedMovies, saveMovie }) {
   return (
     <div className="movies-list">
       <ul className="movies-list__container elements-list">
@@ -12,6 +12,7 @@ function MoviesCardList({ movies, component, savedMovies}) {
             <MoviesCard
               component={component}
               movie={movie}
+              saveMovie={saveMovie}
               movieSaved={
                 component === "Movies"
                 ? savedMovies.some((item) => {
