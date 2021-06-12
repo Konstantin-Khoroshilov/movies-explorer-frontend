@@ -12,6 +12,7 @@ import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import mainApi from "../../utils/MainApi";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 function App() {
   const history = useHistory();
@@ -19,13 +20,13 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [reqStatusMsg, setReqStatusMsg] = React.useState("");
+
   const handleCloseClick = () => {
     setNavigationVisible(false);
   }
   const handleMenuClick = () => {
     setNavigationVisible(true);
   }
-
 
   async function errHandler(err) {
     const errMsg = await err.text();
@@ -41,7 +42,7 @@ function App() {
     }
   }
 
-  async function handleRegisterUser(name, email, password) {
+  async function onRegister(name, email, password) {
     setReqStatusMsg("...");
     try {
       const tokenRequest = await mainApi.signup(name, email, password);
@@ -60,7 +61,7 @@ function App() {
     }
   }
 
-  async function handleLoginUser(email, password) {
+  async function onLogin(email, password) {
     setReqStatusMsg("...");
     try {
       const tokenRequest = await mainApi.signin(email, password);
@@ -82,7 +83,7 @@ function App() {
   async function handleUserUpdate(email, password) {
     setReqStatusMsg("...");
     try {
-      const userRequest = await mainApi.updateUserInfo(email, password);
+      const userRequest = await mainApi.updateUserInfo(email, password, localStorage.getItem("token"));
       const user = await userRequest;
       setCurrentUser(user);
       setReqStatusMsg("Данные успешно обновлены!");
@@ -95,35 +96,71 @@ function App() {
     }
   }
 
-  const handleLogOff = () => {
+  const onSignOut = () => {
     localStorage.removeItem("token");
     setLoggedIn(false);
     history.push("/");
   }
 
   React.useEffect(() => {
+    let cleanupFunction = false;
     const token = localStorage.getItem("token");
     if (token !== null) {
       mainApi.getUserInfo(token)
         .then((user) => {
-          setLoggedIn(true);
-          setCurrentUser(user);
+          if (!cleanupFunction) {
+            setLoggedIn(true);
+            setCurrentUser(user);
+          }
           history.push("/movies");
         })
         .catch((err) => {
-          errHandler(err);
+          console.log(err);
         })
         .finally(() => {
           setTimeout(() => {
-            setReqStatusMsg("");
+            if (!cleanupFunction) setReqStatusMsg("");
           }, 1000);
         })
     }
+    return () => cleanupFunction = true;
   }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Switch>
+        <ProtectedRoute
+          path="/movies"
+          loggedIn={loggedIn}
+          component={Movies}
+          navigationVisible={navigationVisible}
+          handleCloseClick={handleCloseClick}
+          handleMenuClick={handleMenuClick}
+          storedData={
+            JSON.parse(localStorage.getItem("movies"))
+              ? JSON.parse(localStorage.getItem("movies"))
+              : false
+          }
+        />
+        <ProtectedRoute
+          path="/saved-movies"
+          loggedIn={loggedIn}
+          component={SavedMovies}
+          navigationVisible={navigationVisible}
+          handleCloseClick={handleCloseClick}
+          handleMenuClick={handleMenuClick}
+        />
+        <ProtectedRoute
+          path="/profile"
+          loggedIn={loggedIn}
+          component={Profile}
+          navigationVisible={navigationVisible}
+          handleCloseClick={handleCloseClick}
+          handleMenuClick={handleMenuClick}
+          reqStatusMsg={reqStatusMsg}
+          handleUserUpdate={handleUserUpdate}
+          onLogout={onSignOut}
+        />
         <Route exact path="/">
           <Main
             loggedIn={loggedIn}
@@ -132,43 +169,11 @@ function App() {
             handleMenuClick={handleMenuClick}
           />
         </Route>
-        <Route path="/movies">
-          <Movies
-            loggedIn={loggedIn}
-            navigationVisible={navigationVisible}
-            handleCloseClick={handleCloseClick}
-            handleMenuClick={handleMenuClick}
-            storedData={
-              JSON.parse(localStorage.getItem("movies"))
-                ? JSON.parse(localStorage.getItem("movies"))
-                : false
-            }
-          />
-        </Route>
-        <Route path="/saved-movies">
-          <SavedMovies
-            loggedIn={loggedIn}
-            navigationVisible={navigationVisible}
-            handleCloseClick={handleCloseClick}
-            handleMenuClick={handleMenuClick}
-          />
-        </Route>
-        <Route path="/profile">
-          <Profile
-            loggedIn={loggedIn}
-            navigationVisible={navigationVisible}
-            handleCloseClick={handleCloseClick}
-            handleMenuClick={handleMenuClick}
-            reqStatusMsg={reqStatusMsg}
-            handleUserUpdate={handleUserUpdate}
-            onLogout={handleLogOff}
-          />
-        </Route>
         <Route path="/signin">
-          <Login onSubmit={handleLoginUser} reqStatusMsg={reqStatusMsg} />
+          <Login onSubmit={onLogin} reqStatusMsg={reqStatusMsg} />
         </Route>
         <Route path="/signup">
-          <Register onSubmit={handleRegisterUser} reqStatusMsg={reqStatusMsg} />
+          <Register onSubmit={onRegister} reqStatusMsg={reqStatusMsg} />
         </Route>
         <Route path="*">
           <NotFound />

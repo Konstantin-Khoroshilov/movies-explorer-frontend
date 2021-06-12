@@ -2,7 +2,7 @@ import React from "react";
 import "./MoviesCard.css";
 import cinemaIcon from "../../images/cinema-icon.svg";
 
-function MoviesCard({ component, movie, saveMovie, deleteMovie, movieSaved, removeSavedMovie }) {
+function MoviesCard({ component, movie, saveMovie, deleteMovie, movieSaved }) {
   const getTimeFromMins = (mins) => {
     let hours = Math.trunc(mins / 60);
     let minutes = mins % 60;
@@ -23,7 +23,7 @@ function MoviesCard({ component, movie, saveMovie, deleteMovie, movieSaved, remo
           <span className="movies-list__movie-duration">{getTimeFromMins(movie.duration)}</span>
         </figcaption>
         <a
-          href={movie.trailerLink ? movie.trailerLink : movie.trailer }
+          href={movie.trailerLink ? movie.trailerLink : movie.trailer}
           className="link"
           target="_blank"
           rel="noopener noreferrer"

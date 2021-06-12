@@ -61,11 +61,11 @@ class Api {
       );
     });
   }
-  updateUserInfo(userName, email) {
+  updateUserInfo(userName, email, token) {
     return fetch(this._updateUserDataUrl, {
       method: "PATCH",
       headers: {
-        authorization: this._authorization,
+        authorization: token ? token : this._authorization,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -93,12 +93,13 @@ class Api {
     nameRU,
     nameEN,
     thumbnail,
-    movieId
+    movieId,
+    token
   ) {
     return fetch(this._addNewMovieUrl, {
       method: "POST",
       headers: {
-        authorization: this._authorization,
+        authorization: token ? token : this._authorization,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -124,11 +125,11 @@ class Api {
       );
     });
   }
-  deleteMovie(movieId) {
+  deleteMovie(movieId, token) {
     return fetch(`${this._deleteMovieUrl}${movieId}`, {
       method: "DELETE",
       headers: {
-        authorization: this._authorization,
+        authorization: token ? token : this._authorization,
         "Content-Type": "application/json",
       },
     }).then((res) => {

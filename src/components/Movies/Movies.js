@@ -22,6 +22,18 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [savedMoviesLoadStatus, setSavedMoviesLoadStatus] = React.useState("inProcess");
 
+  const getSavedMovies = (cleanupFunction) => {
+    mainApi.getSavedMovies(localStorage.getItem("token"))
+      .then((savedMovies) => {
+        if (!cleanupFunction) {
+          setSavedMovies(savedMovies);
+          setSavedMoviesLoadStatus("success");
+        }
+      }).catch(() => {
+        if (!cleanupFunction) setSavedMoviesLoadStatus("fail");
+      });
+  }
+
   const saveMovie = (evt, movie) => {
     if (!evt.target.classList.contains("movies-list__button_type_saved")) {
       evt.target.value = "...";
@@ -37,8 +49,10 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
         movie.nameEN ? movie.nameEN : "Информация отсутствует",
         `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
         `${movie.id}`,
+        localStorage.getItem("token")
       )
-        .then((savedMovie) => {
+        .then(() => {
+          getSavedMovies();
           evt.target.className = "movies-list__button movies-list__button_type_saved button";
           evt.target.value = "";
         }).catch(() => {
@@ -47,7 +61,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
         })
     } else {
       evt.target.value = "...";
-      mainApi.deleteMovie(movie.id)
+      mainApi.deleteMovie(movie.id, localStorage.getItem("token"))
         .then(() => {
           evt.target.className = "movies-list__button button";
           evt.target.value = "Сохранить";
@@ -61,14 +75,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
 
   React.useEffect(() => {
     let cleanupFunction = false;
-    mainApi.getSavedMovies()
-      .then((savedMovies) => {
-        if (!cleanupFunction) setSavedMovies(savedMovies);
-        setSavedMovies(savedMovies);
-        setSavedMoviesLoadStatus("success");
-      }).catch(() => {
-        setSavedMoviesLoadStatus("fail");
-      });
+    getSavedMovies(cleanupFunction);
     return () => cleanupFunction = true;
   }, []);
 
@@ -142,7 +149,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
     evt.target.value = "...";
     evt.target.className = "movies-list__button button";
     console.log(movie.id)
-    mainApi.deleteMovie(movie.id)
+    mainApi.deleteMovie(movie.id, localStorage.getItem("token"))
       .then(() => {
         evt.target.value = "Сохранить";
       })

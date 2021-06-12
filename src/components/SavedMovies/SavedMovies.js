@@ -30,7 +30,7 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
   const deleteMovie = (evt, movie) => {
     evt.target.className = "movies-list__button";
     evt.target.value = "...";
-    mainApi.deleteMovie(movie.movieId)
+    mainApi.deleteMovie(movie.movieId, localStorage.getItem("token"))
       .then((deletedMovie) => {
         const newMovieList = [];
         savedMovies.forEach((item, index, array) => {
@@ -60,13 +60,15 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
 
   React.useEffect(() => {
     let cleanupFunction = false;
-    mainApi.getSavedMovies()
+    mainApi.getSavedMovies(localStorage.getItem("token"))
       .then((savedMovies) => {
-        if (!cleanupFunction) setSavedMovies(savedMovies);
-        if (savedMovies.length === 0) {
-          setMoviesLoadStatus("emptyResult");
-        } else {
-          setMoviesLoadStatus("success");
+        if (!cleanupFunction) {
+          setSavedMovies(savedMovies);
+          if (savedMovies.length === 0) {
+            setMoviesLoadStatus("emptyResult");
+          } else {
+            setMoviesLoadStatus("success");
+          }
         }
       }).catch(() => {
         setMoviesLoadStatus("fail");
@@ -75,14 +77,14 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
   }, [])
 
   React.useEffect(() => {
-    setPageStatus('filtetingMovies');
     setFilteredMovies(getFilteredData({ searchQuery, switchOn }, savedMovies));
-      if (getFilteredData({ searchQuery, switchOn }, savedMovies).length !== 0) {
-        setMoviesFilterStatus("success");
-      } else {
-        setMoviesFilterStatus("emptyResult");
-      }
-  }, [switchOn]);
+    if (getFilteredData({ searchQuery, switchOn }, savedMovies).length !== 0) {
+      setPageStatus('filtetingMovies');
+      setMoviesFilterStatus("success");
+    } else {
+      setMoviesFilterStatus("emptyResult");
+    }
+  }, [switchOn, savedMovies]);
 
   return (
     <>
