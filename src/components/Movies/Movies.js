@@ -26,15 +26,15 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
     if (!evt.target.classList.contains("movies-list__button_type_saved")) {
       evt.target.value = "...";
       mainApi.addNewMovie(
-        movie.country,
-        movie.director,
-        movie.duration,
-        movie.year,
-        movie.description,
+        movie.country ? movie.country : "Информация отсутствует",
+        movie.director ? movie.director : "Информация отсутствует",
+        movie.duration ? movie.duration : 0,
+        movie.year ? movie.year : "Информация отсутствует",
+        movie.description ? movie.description : "Информация отсутствует",
         `https://api.nomoreparties.co${movie.image.url}`,
-        movie.trailer = movie.trailerLink,
-        movie.nameRU,
-        movie.nameEN,
+        movie.trailer ? movie.trailer : movie.trailerLink ? movie.trailerLink : 'https://www.youtube.com/',
+        movie.nameRU ? movie.nameRU : "Информация отсутствует",
+        movie.nameEN ? movie.nameEN : "Информация отсутствует",
         `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
         `${movie.id}`,
       )

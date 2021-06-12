@@ -17,6 +17,15 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
   const [moviesFilterStatus, setMoviesFilterStatus] = React.useState("");
   const [switchOn, setSwitchOn] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [pageStatus, setPageStatus] = React.useState("loadingInitCards");
+
+  const onSwitch = () => {
+    setSwitchOn(!switchOn);
+  }
+
+  const onSearchQueryChange = (evt) => {
+    setSearchQuery(evt.target.value);
+  }
 
   const deleteMovie = (evt, movie) => {
     evt.target.className = "movies-list__button";
@@ -25,7 +34,7 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
       .then((deletedMovie) => {
         const newMovieList = [];
         savedMovies.forEach((item, index, array) => {
-          if(item._id !== deletedMovie._id) newMovieList.push(item);
+          if (item._id !== deletedMovie._id) newMovieList.push(item);
         })
         setSavedMovies(newMovieList);
       }).catch(() => {
@@ -36,32 +45,24 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
 
   const filterMovies = (evt) => {
     evt.preventDefault();
-    if (moviesLoadStatus === "success") {
-      if (searchQuery === "") {
-        setMoviesFilterStatus("emptyQuery");
+    setPageStatus('filtetingMovies');
+    if (searchQuery === "") {
+      setMoviesFilterStatus("emptyQuery")
+    } else {
+      setFilteredMovies(getFilteredData({ searchQuery, switchOn }, savedMovies));
+      if (getFilteredData({ searchQuery, switchOn }, savedMovies).length !== 0) {
+        setMoviesFilterStatus("success");
       } else {
-        setFilteredMovies(getFilteredData({ searchQuery, switchOn }, savedMovies));
-        if (getFilteredData({ searchQuery, switchOn }, savedMovies).length === 0) {
-          setMoviesFilterStatus("emptyResult");
-        } else {
-          setMoviesFilterStatus("success");
-        }
+        setMoviesFilterStatus("emptyResult");
       }
     }
   }
 
-  const onSwitch = () => {
-    setSwitchOn(!switchOn);
-  }
-
-  const onSearchQueryChange = (evt) => {
-    setSearchQuery(evt.target.value);
-  }
   React.useEffect(() => {
     let cleanupFunction = false;
     mainApi.getSavedMovies()
       .then((savedMovies) => {
-        if(!cleanupFunction) setSavedMovies(savedMovies);
+        if (!cleanupFunction) setSavedMovies(savedMovies);
         if (savedMovies.length === 0) {
           setMoviesLoadStatus("emptyResult");
         } else {
@@ -70,37 +71,45 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
       }).catch(() => {
         setMoviesLoadStatus("fail");
       });
-      return () => cleanupFunction = true;
+    return () => cleanupFunction = true;
   }, [])
+
+  React.useEffect(() => {
+    setPageStatus('filtetingMovies');
+    setFilteredMovies(getFilteredData({ searchQuery, switchOn }, savedMovies));
+      if (getFilteredData({ searchQuery, switchOn }, savedMovies).length !== 0) {
+        setMoviesFilterStatus("success");
+      } else {
+        setMoviesFilterStatus("emptyResult");
+      }
+  }, [switchOn]);
+
   return (
     <>
       <Header place="SavedMovies" handleMenuClick={handleMenuClick} loggedIn={loggedIn} />
       <SearchForm onSubmit={filterMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} />
       <section className="saved-movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
-        {moviesLoadStatus === "success"
-          ? (<MoviesCardList movies={savedMovies} component="SavedMovies" deleteMovie={deleteMovie} />)
-          : moviesLoadStatus === "inProcess"
-            ? (<Preloader />)
+        {
+          pageStatus === "loadingInitCards"
+            ? moviesLoadStatus === "success"
+              ? (<MoviesCardList movies={savedMovies} component="SavedMovies" deleteMovie={deleteMovie} />)
+              : moviesLoadStatus === "inProcess"
+                ? (<Preloader />)
+                : moviesLoadStatus === "emptyResult"
+                  ? (<h2 className="saved-movies__search-status">Нет сохраненных фильмов</h2>)
+                  : (<h2 className="saved-movies__search-status">
+                    Во время запроса произошла ошибка.
+                    Возможно, проблема с соединением или сервер недоступен.
+                    Подождите немного и попробуйте ещё раз
+                  </h2>)
             : moviesFilterStatus === "success"
               ? (<MoviesCardList movies={filteredMovies} component="SavedMovies" deleteMovie={deleteMovie} />)
               : moviesFilterStatus === "emptyQuery"
-                ? (<h2 className="saved-movies__search-status">
-                  Нужно ввести ключевое слово
-                </h2>)
+                ? (<h2 className="saved-movies__search-status">Нужно ввести ключевое слово</h2>)
                 : moviesFilterStatus === "emptyResult"
-                  ? (<h2 className="saved-movies__search-status">
-                    Ничего не найдено
-                  </h2>)
-                  : moviesLoadStatus === "emptyResult"
-                    ? (<h2 className="saved-movies__search-status">
-                      Нет сохраненных фильмов
-                    </h2>)
-                    : (<h2 className="saved-movies__search-status">
-                      Во время запроса произошла ошибка.
-                      Возможно, проблема с соединением или сервер недоступен.
-                      Подождите немного и попробуйте ещё раз
-                    </h2>)
+                  ? (<h2 className="saved-movies__search-status">Ничего не найдено</h2>)
+                  : (<h2 className="saved-movies__search-status">Что-то пошло не так</h2>)
         }
       </section>
       <Footer />
