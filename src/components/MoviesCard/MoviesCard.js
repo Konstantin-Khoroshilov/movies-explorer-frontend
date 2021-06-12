@@ -2,7 +2,7 @@ import React from "react";
 import "./MoviesCard.css";
 import cinemaIcon from "../../images/cinema-icon.svg";
 
-function MoviesCard({ movie, component, movieSaved, saveMovie, deleteMovie }) {
+function MoviesCard({ component, movie, saveMovie, deleteMovie, movieSaved, removeSavedMovie }) {
   const getTimeFromMins = (mins) => {
     let hours = Math.trunc(mins / 60);
     let minutes = mins % 60;
@@ -23,35 +23,38 @@ function MoviesCard({ movie, component, movieSaved, saveMovie, deleteMovie }) {
           <span className="movies-list__movie-duration">{getTimeFromMins(movie.duration)}</span>
         </figcaption>
         <a
-          href={movie.trailerLink}
+          href={movie.trailerLink ? movie.trailerLink : movie.trailer }
           className="link"
           target="_blank"
           rel="noopener noreferrer"
         >
           <img
             className="movies-list__movie-image"
-            src={movie.image ? `https://api.nomoreparties.co${movie.image.url}` : cinemaIcon}
+            src={component === "SavedMovies" ? movie.image : movie.image ? `https://api.nomoreparties.co${movie.image.url}` : cinemaIcon}
             alt={movie.nameRU}
           />
         </a>
         {component === "SavedMovies" ? (
-          <button
+          <input
             type="button"
             className="movies-list__button movies-list__button_type_delete button"
             onClick={(evt) => { deleteMovie(evt, movie) }}
-          ></button>
+            value=""
+          />
         ) : !movieSaved ? (
           <input
             type="button"
             className="movies-list__button button"
             onClick={(evt) => { saveMovie(evt, movie) }}
             value="Сохранить"
-          ></input>
+          />
         ) : (
-          <button
+          <input
             type="button"
             className="movies-list__button movies-list__button_type_saved button"
-          ><span className="movies-list__check-button"></span></button>
+            value=""
+            onClick={(evt) => { saveMovie(evt, movie) }}
+          />
         )}
       </figure>
     </li>

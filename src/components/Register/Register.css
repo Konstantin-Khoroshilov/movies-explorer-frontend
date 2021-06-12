@@ -52,6 +52,7 @@
 
 .register-form__text-input {
   padding: 0;
+  width: 100%;
 }
 
 .register-form__error-message-container {
@@ -65,8 +66,18 @@
   margin-bottom: 24px;
 }
 
+.register-form__reg-status-container {
+  min-height: 134px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 13px;
+  line-height: 1.23;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
 .register-form__submit {
-  margin-top: 134px;
   width: 100%;
   background-color: #3456F3;
   color: white;
@@ -122,8 +133,11 @@
     text-align: center;
   }
 
+  .register-form__reg-status-container {
+    min-height: 222px;
+  }
+
   .register-form__submit {
-    margin-top: 222px;
     font-size: 12px;
     line-height: 1.25;
   }

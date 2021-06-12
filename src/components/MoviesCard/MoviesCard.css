@@ -53,21 +53,15 @@
   font-size: 12px;
   line-height: .92;
   position: relative;
+  border: none;
+  outline: none;
 }
 
 .movies-list__button_type_saved {
   background: #EE3465;
-}
-
-.movies-list__check-button {
-  display: block;
-  width: 6px;
-  height: 3px;
-  border-right: 1.5px solid white;
-  border-top: 1.5px solid white;
-  transform: rotate(135deg);
-  margin: 0 auto;
-  margin-top: -3px;
+  background-image: url("../../images/check-icon.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .movies-list__button_type_delete {

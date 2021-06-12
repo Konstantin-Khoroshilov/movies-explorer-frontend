@@ -7,7 +7,7 @@ class Api {
     this._deleteMovieUrl = options.deleteMovieUrl;
     this._signupUrl = options.signupUrl;
     this._signinUrl = options.signinUrl;
-    //this._authorization = options.authorization;
+    this._authorization = options.authorization;
   }
   signup(name, email, password) {
     return fetch(this._signupUrl, {
@@ -49,7 +49,7 @@ class Api {
   getUserInfo(token) {
     return fetch(this._updateUserDataUrl, {
       headers: {
-        authorization: token ? token : this._authorizationtoken,
+        authorization: token ? token : this._authorization,
       },
     }).then((res) => {
       if (res.ok) {
@@ -144,7 +144,7 @@ class Api {
   getSavedMovies(token) {
     return fetch(this._savedMoviesUrl, {
       headers: {
-        authorization: token //? token : this._authorizationtoken,
+        authorization: token ? token : this._authorization,
       },
     }).then((res) => {
       if (res.ok) {
@@ -168,7 +168,7 @@ const apiData = {
     "https://api.my-movies.students.nomoredomains.club/users/me",
   addNewMovieUrl: "https://api.my-movies.students.nomoredomains.club/movies",
   deleteMovieUrl: "https://api.my-movies.students.nomoredomains.club/movies/",
-  //authorization: localStorage.getItem("token"),
+  authorization: localStorage.getItem("token"),
 };
 
 const mainApi = new Api(apiData);

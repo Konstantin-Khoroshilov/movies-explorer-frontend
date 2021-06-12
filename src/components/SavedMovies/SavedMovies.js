@@ -10,7 +10,7 @@ import Preloader from "../Preloader/Preloader";
 import mainApi from "../../utils/MainApi";
 import { getFilteredData } from "../../utils/Filter";
 
-function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick }) {
+function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, loggedIn }) {
   const [moviesLoadStatus, setMoviesLoadStatus] = React.useState("inProcess");
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [filteredMovies, setFilteredMovies] = React.useState([]);
@@ -21,11 +21,13 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick }) {
   const deleteMovie = (evt, movie) => {
     evt.target.className = "movies-list__button";
     evt.target.value = "...";
-    mainApi.deleteMovie(movie.id)
-      .then(() => {
-        setSavedMovies(savedMovies.map((item, index, array) => {
-          return item.id !== movie.id ? true : false;
-        }));
+    mainApi.deleteMovie(movie.movieId)
+      .then((deletedMovie) => {
+        const newMovieList = [];
+        savedMovies.forEach((item, index, array) => {
+          if(item._id !== deletedMovie._id) newMovieList.push(item);
+        })
+        setSavedMovies(newMovieList);
       }).catch(() => {
         evt.target.className = "movies-list__button movies-list__button_type_delete button";
         evt.target.value = "";
@@ -56,22 +58,28 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick }) {
     setSearchQuery(evt.target.value);
   }
   React.useEffect(() => {
+    let cleanupFunction = false;
     mainApi.getSavedMovies()
       .then((savedMovies) => {
-        setSavedMovies(savedMovies);
-        setMoviesLoadStatus("success");
+        if(!cleanupFunction) setSavedMovies(savedMovies);
+        if (savedMovies.length === 0) {
+          setMoviesLoadStatus("emptyResult");
+        } else {
+          setMoviesLoadStatus("success");
+        }
       }).catch(() => {
         setMoviesLoadStatus("fail");
-      })
+      });
+      return () => cleanupFunction = true;
   }, [])
   return (
     <>
-      <Header place="SavedMovies" handleMenuClick={handleMenuClick} />
+      <Header place="SavedMovies" handleMenuClick={handleMenuClick} loggedIn={loggedIn} />
       <SearchForm onSubmit={filterMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} />
       <section className="saved-movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
         {moviesLoadStatus === "success"
-          ? (<MoviesCardList movies={savedMovies} component="SavedMovies" />)
+          ? (<MoviesCardList movies={savedMovies} component="SavedMovies" deleteMovie={deleteMovie} />)
           : moviesLoadStatus === "inProcess"
             ? (<Preloader />)
             : moviesFilterStatus === "success"
@@ -84,11 +92,15 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick }) {
                   ? (<h2 className="saved-movies__search-status">
                     Ничего не найдено
                   </h2>)
-                  : (<h2 className="saved-movies__search-status">
-                    Во время запроса произошла ошибка.
-                    Возможно, проблема с соединением или сервер недоступен.
-                    Подождите немного и попробуйте ещё раз
-                  </h2>)
+                  : moviesLoadStatus === "emptyResult"
+                    ? (<h2 className="saved-movies__search-status">
+                      Нет сохраненных фильмов
+                    </h2>)
+                    : (<h2 className="saved-movies__search-status">
+                      Во время запроса произошла ошибка.
+                      Возможно, проблема с соединением или сервер недоступен.
+                      Подождите немного и попробуйте ещё раз
+                    </h2>)
         }
       </section>
       <Footer />

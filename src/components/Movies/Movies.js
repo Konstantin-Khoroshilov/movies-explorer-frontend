@@ -11,7 +11,7 @@ import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 import { getFilteredData, getVisibleData } from "../../utils/Filter";
 
-function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedData }) {
+function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedData, loggedIn }) {
   const [searchResult, setSearchResult] = React.useState("notStarted");
   const [searchStatus, setSearchStatus] = React.useState("notStarted");
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -20,10 +20,10 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   const [visibleData, setVisibleData] = React.useState([]);
   const [switchOn, setSwitchOn] = React.useState(false);
   const [savedMovies, setSavedMovies] = React.useState([]);
-  const [savedMoviesLoadStatus, setSavedMoviesLoadStatus] = React.useState('inProcess');
+  const [savedMoviesLoadStatus, setSavedMoviesLoadStatus] = React.useState("inProcess");
 
   const saveMovie = (evt, movie) => {
-    if (!evt.target.value.classList.contains("movies-list__button_type_saved")) {
+    if (!evt.target.classList.contains("movies-list__button_type_saved")) {
       evt.target.value = "...";
       mainApi.addNewMovie(
         movie.country,
@@ -38,34 +38,38 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
         `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
         `${movie.id}`,
       )
-        .then(() => {
-          evt.target.value = "";
+        .then((savedMovie) => {
           evt.target.className = "movies-list__button movies-list__button_type_saved button";
+          evt.target.value = "";
         }).catch(() => {
+          evt.target.className = "movies-list__button button";
           evt.target.value = "Сохранить";
         })
     } else {
-      evt.target.className = "movies-list__button";
       evt.target.value = "...";
       mainApi.deleteMovie(movie.id)
         .then(() => {
           evt.target.className = "movies-list__button button";
           evt.target.value = "Сохранить";
-        }).catch(() => {
+        })
+        .catch(() => {
           evt.target.className = "movies-list__button movies-list__button_type_saved button";
           evt.target.value = "";
-        });
+        })
     }
   }
 
   React.useEffect(() => {
+    let cleanupFunction = false;
     mainApi.getSavedMovies()
       .then((savedMovies) => {
+        if (!cleanupFunction) setSavedMovies(savedMovies);
         setSavedMovies(savedMovies);
-        setSavedMoviesLoadStatus('success');
+        setSavedMoviesLoadStatus("success");
       }).catch(() => {
         setSavedMoviesLoadStatus("fail");
       });
+    return () => cleanupFunction = true;
   }, []);
 
   const onSwitch = () => {
@@ -75,12 +79,12 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   const render = (items) => {
     setFilteredData(getFilteredData({ searchQuery, switchOn }, items));
     if (getFilteredData({ searchQuery, switchOn }, items).length === 0) {
-      setSearchStatus('started');
-      setSearchResult('emptyResult');
+      setSearchStatus("started");
+      setSearchResult("emptyResult");
     } else {
       setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, items)));
-      setSearchStatus('started');
-      setSearchResult('success');
+      setSearchStatus("started");
+      setSearchResult("success");
     }
   }
 
@@ -91,12 +95,12 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   const getMovies = (evt) => {
     evt.preventDefault();
     if (searchQuery === "") {
-      setSearchStatus('started');
-      setSearchResult('emptyQuery');
+      setSearchStatus("started");
+      setSearchResult("emptyQuery");
     } else {
-      if (savedMoviesLoadStatus === 'inProcess') {
-        setSearchStatus('started');
-        setSearchResult('inProcess');
+      if (savedMoviesLoadStatus === "inProcess") {
+        setSearchStatus("started");
+        setSearchResult("inProcess");
       } else if (savedMoviesLoadStatus === "success") {
         if (storedData) {
           setData(storedData);
@@ -104,7 +108,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
         } else if (data.length !== 0) {
           render(data);
         } else {
-          setSearchStatus('started');
+          setSearchStatus("started");
           setSearchResult("inProcess");
           moviesApi.getMovies()
             .then((movies) => {
@@ -116,8 +120,8 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
             });
         }
       } else {
-        setSearchStatus('started');
-        setSearchResult('fail');
+        setSearchStatus("started");
+        setSearchResult("fail");
       }
     }
   }
@@ -132,6 +136,20 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
     if (window.innerWidth >= 1280) {
       setVisibleData(filteredData.slice(0, visibleData.length + 3));
     }
+  }
+
+  const removeSavedMovie = (evt, movie) => {
+    evt.target.value = "...";
+    evt.target.className = "movies-list__button button";
+    console.log(movie.id)
+    mainApi.deleteMovie(movie.id)
+      .then(() => {
+        evt.target.value = "Сохранить";
+      })
+      .catch(() => {
+        evt.target.value = "";
+        evt.target.className = "movies-list__button movies-list__button_type_saved button";
+      })
   }
 
   React.useEffect(() => {
@@ -160,7 +178,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
 
   return (
     <div className="page">
-      <Header place="Movies" handleMenuClick={handleMenuClick} />
+      <Header place="Movies" handleMenuClick={handleMenuClick} loggedIn={loggedIn} />
       <SearchForm onSubmit={getMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} />
       <section className="movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
@@ -177,7 +195,13 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
                 : searchResult === "success"
                   ? (
                     <>
-                      <MoviesCardList movies={visibleData} component="Movies" savedMovies={savedMovies} saveMovie={saveMovie} />
+                      <MoviesCardList
+                        movies={visibleData}
+                        component="Movies"
+                        savedMovies={savedMovies}
+                        saveMovie={saveMovie}
+                        removeSavedMovie={removeSavedMovie}
+                      />
                       <button
                         className={
                           visibleData.length < filteredData.length

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import profileIcon from "../../images/profile-icon.svg";
 import "./Navigation.css";
 
@@ -24,10 +24,10 @@ function Navigation({handleCloseClick, navigationVisible}) {
           <NavLink to="/saved-movies" activeClassName="navigation__link_active" className="navigation__link link">Сохранённые&nbsp;фильмы</NavLink>
         </li>
       </ul>
-      <Link className="navigation__profile link" to="/profile">
+      <NavLink className="navigation__profile link" activeClassName="navigation__link_active" to="/profile">
         Аккаунт
         <img className="navigation__profile-icon" alt="Иконка профиля" src={profileIcon} /> 
-      </Link>
+      </NavLink>
     </nav>
   );
 };
