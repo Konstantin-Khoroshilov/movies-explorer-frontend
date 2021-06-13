@@ -149,6 +149,11 @@ function App() {
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
           handleMenuClick={handleMenuClick}
+          storedData={
+            JSON.parse(localStorage.getItem("savedMoviesFilter"))
+              ? JSON.parse(localStorage.getItem("savedMoviesFilter"))
+              : false
+          }
         />
         <ProtectedRoute
           path="/profile"

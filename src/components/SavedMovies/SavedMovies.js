@@ -10,14 +10,18 @@ import Preloader from "../Preloader/Preloader";
 import mainApi from "../../utils/MainApi";
 import { getFilteredData } from "../../utils/Filter";
 
-function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, loggedIn }) {
+function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, loggedIn, storedData }) {
   const [moviesLoadStatus, setMoviesLoadStatus] = React.useState("inProcess");
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [filteredMovies, setFilteredMovies] = React.useState([]);
   const [moviesFilterStatus, setMoviesFilterStatus] = React.useState("");
-  const [switchOn, setSwitchOn] = React.useState(false);
+  const [switchOn, setSwitchOn] = React.useState(storedData.switchOn ? storedData.switchOn : false);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [pageStatus, setPageStatus] = React.useState("loadingInitCards");
+
+  const storeData = (searchQuery, switchOn) => {
+    localStorage.setItem("savedMoviesFilter", JSON.stringify({searchQuery, switchOn}));
+  }
 
   const onSwitch = () => {
     setSwitchOn(!switchOn);
@@ -44,12 +48,13 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
   }
 
   const filterMovies = (evt) => {
-    evt.preventDefault();
+    if (evt) evt.preventDefault();
     setPageStatus('filtetingMovies');
     if (searchQuery === "") {
-      setMoviesFilterStatus("emptyQuery")
+      setMoviesFilterStatus("emptyQuery");
     } else {
       setFilteredMovies(getFilteredData({ searchQuery, switchOn }, savedMovies));
+      storeData(searchQuery, switchOn);
       if (getFilteredData({ searchQuery, switchOn }, savedMovies).length !== 0) {
         setMoviesFilterStatus("success");
       } else {
@@ -76,6 +81,12 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
     return () => cleanupFunction = true;
   }, [])
 
+  React.useEffect(()=>{
+    setSwitchOn(storedData.switchOn);
+    setSearchQuery(storedData.searchQuery);
+    filterMovies();
+  },[savedMovies]);
+
   React.useEffect(() => {
     setFilteredMovies(getFilteredData({ searchQuery, switchOn }, savedMovies));
     if (getFilteredData({ searchQuery, switchOn }, savedMovies).length !== 0) {
@@ -89,7 +100,7 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
   return (
     <>
       <Header place="SavedMovies" handleMenuClick={handleMenuClick} loggedIn={loggedIn} />
-      <SearchForm onSubmit={filterMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} />
+      <SearchForm onSubmit={filterMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} searchQuery={searchQuery} switchOn={switchOn}  />
       <section className="saved-movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
         {
