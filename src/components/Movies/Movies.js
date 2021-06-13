@@ -18,9 +18,13 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   const [data, setData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [visibleData, setVisibleData] = React.useState([]);
-  const [switchOn, setSwitchOn] = React.useState(false);
+  const [switchOn, setSwitchOn] = React.useState(storedData.switchOn ? storedData.switchOn : false);
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [savedMoviesLoadStatus, setSavedMoviesLoadStatus] = React.useState("inProcess");
+
+  const storeData = (searchQuery, switchOn, movies) => {
+    localStorage.setItem("movies", JSON.stringify({searchQuery, switchOn, movies}));
+  }
 
   const getSavedMovies = (cleanupFunction) => {
     mainApi.getSavedMovies(localStorage.getItem("token"))
@@ -73,12 +77,6 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
     }
   }
 
-  React.useEffect(() => {
-    let cleanupFunction = false;
-    getSavedMovies(cleanupFunction);
-    return () => cleanupFunction = true;
-  }, []);
-
   const onSwitch = () => {
     setSwitchOn(!switchOn);
   }
@@ -110,16 +108,19 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
         setSearchResult("inProcess");
       } else if (savedMoviesLoadStatus === "success") {
         if (storedData) {
-          setData(storedData);
-          render(storedData);
+          setData(storedData.movies);
+          render(storedData.movies);
+          storeData(searchQuery, switchOn, storedData.movies);
         } else if (data.length !== 0) {
           render(data);
+          storeData(searchQuery, switchOn, data);
         } else {
           setSearchStatus("started");
           setSearchResult("inProcess");
           moviesApi.getMovies()
             .then((movies) => {
               localStorage.setItem("movies", JSON.stringify(movies));
+              storeData(searchQuery, switchOn, movies);
               setData(movies);
               render(movies);
             }).catch(() => {
@@ -178,15 +179,30 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
       } else if (searchQuery === "") {
         setSearchResult("emptyQuery");
       } else {
-        setSearchResult(searchResult);
+        setSearchResult("success");
       }
     }
-  }, [switchOn, savedMoviesLoadStatus]);
+  }, [switchOn]);
+
+  React.useEffect(() => {
+    let cleanupFunction = false;
+    getSavedMovies(cleanupFunction);
+    return () => cleanupFunction = true;
+  }, []);
+
+  React.useEffect(()=>{
+    if (storedData) {
+      setData(storedData.movies);
+      setSearchQuery(storedData.searchQuery);
+      setSwitchOn(storedData.switchOn);
+      render(storedData.movies);
+    }
+  }, [data]);
 
   return (
     <div className="page">
       <Header place="Movies" handleMenuClick={handleMenuClick} loggedIn={loggedIn} />
-      <SearchForm onSubmit={getMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} />
+      <SearchForm onSubmit={getMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} searchQuery={searchQuery} switchOn={switchOn} />
       <section className="movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
         <div className={
