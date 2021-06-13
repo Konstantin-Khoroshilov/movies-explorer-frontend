@@ -1,4 +1,11 @@
-module.exports.getFilteredData = ({ searchQuery, switchOn }, data) => {
+import {
+  SHORTMOVIE_DURATION,
+  SMALL_SCREEN_VISIBLE_MOVIES_NUMBER,
+  MIDDLE_SCREEN_VISIBLE_MOVIES_NUMBER,
+  LARGE_SCREEN_VISIBLE_MOVIES_NUMBER,
+} from "./constants";
+
+const getFilteredData = ({ searchQuery, switchOn }, data) => {
   const filteredMOvies = data.filter((item, index, array) => {
     return Object.values(item).some((item, index, array) => {
       return typeof item === "string" ? item.toLowerCase().includes(searchQuery.toLowerCase()) : false;
@@ -6,35 +13,37 @@ module.exports.getFilteredData = ({ searchQuery, switchOn }, data) => {
   });
   if (switchOn) {
     const shortMovies = filteredMOvies.filter((item, index, array) => {
-      return item.duration <= 40;
+      return item.duration <= SHORTMOVIE_DURATION;
     });
     return shortMovies;
   }
   return filteredMOvies;
 };
 
-module.exports.getVisibleData = (filtered) => {
+const getVisibleData = (filtered) => {
   let visible;
   if (window.innerWidth >= 0 && window.innerWidth <= 480) {
-    if (filtered.length > 5) {
-      visible = filtered.slice(0, 5);
+    if (filtered.length > SMALL_SCREEN_VISIBLE_MOVIES_NUMBER) {
+      visible = filtered.slice(0, SMALL_SCREEN_VISIBLE_MOVIES_NUMBER);
     } else {
       visible = filtered;
     }
   }
   if (window.innerWidth > 480 && window.innerWidth < 1280) {
-    if (filtered.length > 8) {
-      visible = filtered.slice(0, 8);
+    if (filtered.length > MIDDLE_SCREEN_VISIBLE_MOVIES_NUMBER) {
+      visible = filtered.slice(0, MIDDLE_SCREEN_VISIBLE_MOVIES_NUMBER);
     } else {
       visible = filtered;
     }
   }
   if (window.innerWidth >= 1280) {
-    if (filtered.length > 12) {
-      visible = filtered.slice(0, 12);
+    if (filtered.length > LARGE_SCREEN_VISIBLE_MOVIES_NUMBER) {
+      visible = filtered.slice(0, LARGE_SCREEN_VISIBLE_MOVIES_NUMBER);
     } else {
       visible = filtered;
     }
   }
   return visible;
 }
+
+export {getFilteredData, getVisibleData}

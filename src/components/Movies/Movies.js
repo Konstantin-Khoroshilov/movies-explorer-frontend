@@ -10,6 +10,11 @@ import Preloader from "../Preloader/Preloader";
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 import { getFilteredData, getVisibleData } from "../../utils/Filter";
+import {
+  SMALL_SCREEN_ADDITIONAL_MOVIES_NUMBER,
+  MIDDLE_SCREEN_ADDITIONAL_MOVIES_NUMBER,
+  LARGE_SCREEN_ADDITIONAL_MOVIES_NUMBER,
+} from "../../utils/constants";
 
 function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedData, loggedIn }) {
   const [searchResult, setSearchResult] = React.useState("notStarted");
@@ -136,13 +141,13 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
 
   const handleMoreClick = () => {
     if (window.innerWidth >= 0 && window.innerWidth <= 480) {
-      setVisibleData(filteredData.slice(0, visibleData.length + 2));
+      setVisibleData(filteredData.slice(0, visibleData.length + SMALL_SCREEN_ADDITIONAL_MOVIES_NUMBER));
     }
     if (window.innerWidth > 480 && window.innerWidth < 1280) {
-      setVisibleData(filteredData.slice(0, visibleData.length + 2));
+      setVisibleData(filteredData.slice(0, visibleData.length + MIDDLE_SCREEN_ADDITIONAL_MOVIES_NUMBER));
     }
     if (window.innerWidth >= 1280) {
-      setVisibleData(filteredData.slice(0, visibleData.length + 3));
+      setVisibleData(filteredData.slice(0, visibleData.length + LARGE_SCREEN_ADDITIONAL_MOVIES_NUMBER));
     }
   }
 
@@ -204,7 +209,13 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   return (
     <div className="page">
       <Header place="Movies" handleMenuClick={handleMenuClick} loggedIn={loggedIn} />
-      <SearchForm onSubmit={getMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} searchQuery={searchQuery} switchOn={switchOn} />
+      <SearchForm
+        onSubmit={getMovies}
+        onChange={onSearchQueryChange}
+        onSwitch={onSwitch}
+        searchQuery={searchQuery}
+        switchOn={switchOn}
+      />
       <section className="movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
         <div className={
