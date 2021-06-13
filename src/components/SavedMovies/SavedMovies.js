@@ -20,7 +20,7 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
   const [pageStatus, setPageStatus] = React.useState("loadingInitCards");
 
   const storeData = (searchQuery, switchOn) => {
-    localStorage.setItem("savedMoviesFilter", JSON.stringify({searchQuery, switchOn}));
+    localStorage.setItem("savedMoviesFilter", JSON.stringify({ searchQuery, switchOn }));
   }
 
   const onSwitch = () => {
@@ -81,11 +81,13 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
     return () => cleanupFunction = true;
   }, [])
 
-  React.useEffect(()=>{
-    setSwitchOn(storedData.switchOn);
-    setSearchQuery(storedData.searchQuery);
-    filterMovies();
-  },[savedMovies]);
+  React.useEffect(() => {
+    if (storedData) {
+      setSwitchOn(storedData.switchOn);
+      setSearchQuery(storedData.searchQuery);
+      filterMovies();
+    }
+  }, [savedMovies]);
 
   React.useEffect(() => {
     setFilteredMovies(getFilteredData({ searchQuery, switchOn }, savedMovies));
@@ -100,7 +102,7 @@ function SavedMovies({ navigationVisible, handleCloseClick, handleMenuClick, log
   return (
     <>
       <Header place="SavedMovies" handleMenuClick={handleMenuClick} loggedIn={loggedIn} />
-      <SearchForm onSubmit={filterMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} searchQuery={searchQuery} switchOn={switchOn}  />
+      <SearchForm onSubmit={filterMovies} onChange={onSearchQueryChange} onSwitch={onSwitch} searchQuery={searchQuery} switchOn={switchOn} />
       <section className="saved-movies">
         <Navigation handleCloseClick={handleCloseClick} navigationVisible={navigationVisible} />
         {
