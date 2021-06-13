@@ -20,6 +20,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [reqStatusMsg, setReqStatusMsg] = React.useState("");
+  const [formStatus, setFormStatus]= React.useState("notSending");
 
   const handleCloseClick = () => {
     setNavigationVisible(false);
@@ -44,6 +45,7 @@ function App() {
 
   async function onRegister(name, email, password) {
     setReqStatusMsg("...");
+    setFormStatus("sending");
     try {
       const tokenRequest = await mainApi.signup(name, email, password);
       const token = await tokenRequest;
@@ -55,6 +57,7 @@ function App() {
     } catch (err) {
       errHandler(err);
     } finally {
+      setFormStatus("notSending");
       setTimeout(() => {
         setReqStatusMsg("");
       }, 1000);
@@ -63,6 +66,7 @@ function App() {
 
   async function onLogin(email, password) {
     setReqStatusMsg("...");
+    setFormStatus("sending");
     try {
       const tokenRequest = await mainApi.signin(email, password);
       const token = await tokenRequest;
@@ -74,6 +78,7 @@ function App() {
     } catch (err) {
       errHandler(err);
     } finally {
+      setFormStatus("notSending");
       setTimeout(() => {
         setReqStatusMsg("");
       }, 1000);
@@ -82,6 +87,7 @@ function App() {
 
   async function handleUserUpdate(email, password) {
     setReqStatusMsg("...");
+    setFormStatus("sending");
     try {
       const userRequest = await mainApi.updateUserInfo(email, password, localStorage.getItem("token"));
       const user = await userRequest;
@@ -90,6 +96,7 @@ function App() {
     } catch (err) {
       errHandler(err);
     } finally {
+      setFormStatus("notSending");
       setTimeout(() => {
         setReqStatusMsg("");
       }, 1000);
@@ -165,6 +172,7 @@ function App() {
           reqStatusMsg={reqStatusMsg}
           handleUserUpdate={handleUserUpdate}
           onLogout={onSignOut}
+          formStatus={formStatus}
         />
         <Route exact path="/">
           <Main
@@ -175,10 +183,10 @@ function App() {
           />
         </Route>
         <Route path="/signin">
-          <Login onSubmit={onLogin} reqStatusMsg={reqStatusMsg} />
+          <Login onSubmit={onLogin} reqStatusMsg={reqStatusMsg} formStatus={formStatus} />
         </Route>
         <Route path="/signup">
-          <Register onSubmit={onRegister} reqStatusMsg={reqStatusMsg} />
+          <Register onSubmit={onRegister} reqStatusMsg={reqStatusMsg} formStatus={formStatus} />
         </Route>
         <Route path="*">
           <NotFound />

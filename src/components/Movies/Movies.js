@@ -23,7 +23,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
   const [savedMoviesLoadStatus, setSavedMoviesLoadStatus] = React.useState("inProcess");
 
   const storeData = (searchQuery, switchOn, movies) => {
-    localStorage.setItem("movies", JSON.stringify({searchQuery, switchOn, movies}));
+    localStorage.setItem("movies", JSON.stringify({ searchQuery, switchOn, movies }));
   }
 
   const getSavedMovies = (cleanupFunction) => {
@@ -48,7 +48,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
         movie.year ? movie.year : "Информация отсутствует",
         movie.description ? movie.description : "Информация отсутствует",
         `https://api.nomoreparties.co${movie.image.url}`,
-        movie.trailer ? movie.trailer : movie.trailerLink ? movie.trailerLink : 'https://www.youtube.com/',
+        movie.trailer ? movie.trailer : movie.trailerLink ? movie.trailerLink : "https://www.youtube.com/",
         movie.nameRU ? movie.nameRU : "Информация отсутствует",
         movie.nameEN ? movie.nameEN : "Информация отсутствует",
         `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
@@ -64,6 +64,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
           evt.target.value = "Сохранить";
         })
     } else {
+      evt.target.className = "movies-list__button button";
       evt.target.value = "...";
       mainApi.deleteMovie(movie.id, localStorage.getItem("token"))
         .then(() => {
@@ -119,9 +120,8 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
           setSearchResult("inProcess");
           moviesApi.getMovies()
             .then((movies) => {
-              localStorage.setItem("movies", JSON.stringify(movies));
-              storeData(searchQuery, switchOn, movies);
               setData(movies);
+              storeData(searchQuery, switchOn, movies);
               render(movies);
             }).catch(() => {
               setSearchResult("fail");
@@ -160,13 +160,15 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
       })
   }
 
+  const windowResizeHandler = () => {
+    setFilteredData(getFilteredData({ searchQuery, switchOn }, data));
+    setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
+    setSearchResult("success");
+  }
+
   React.useEffect(() => {
     if (savedMoviesLoadStatus === "success") {
-      window.addEventListener("resize", () => {
-        setFilteredData(getFilteredData({ searchQuery, switchOn }, data));
-        setVisibleData(getVisibleData(getFilteredData({ searchQuery, switchOn }, data)));
-        setSearchResult("success");
-      })
+      window.addEventListener("resize", windowResizeHandler)
     }
   }, [data, searchQuery, switchOn, savedMoviesLoadStatus]);
 
@@ -190,7 +192,7 @@ function Movies({ navigationVisible, handleCloseClick, handleMenuClick, storedDa
     return () => cleanupFunction = true;
   }, []);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     if (storedData) {
       setData(storedData.movies);
       setSearchQuery(storedData.searchQuery);

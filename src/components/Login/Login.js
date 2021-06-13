@@ -4,13 +4,13 @@ import "./Login.css";
 import "../../utils/shared.css";
 import logo from "../../images/logo.svg";
 
-function Login({ onSubmit, reqStatusMsg }) {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+function Login({ onSubmit, reqStatusMsg, formStatus }) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [emailIsValid, setEmailIsValid] = React.useState(false);
   const [passwordIsValid, setPasswordIsValid] = React.useState(false);
-  const [emailValidationMessage, setEmailValidationMessage] = React.useState('');
-  const [passwordValidationMessage, setPasswordValidationMessage] = React.useState('');
+  const [emailValidationMessage, setEmailValidationMessage] = React.useState("");
+  const [passwordValidationMessage, setPasswordValidationMessage] = React.useState("");
 
   const handleEmailChange = (evt) => {
     setEmailValidationMessage(
@@ -43,6 +43,7 @@ function Login({ onSubmit, reqStatusMsg }) {
           <label className="login-form__form-field">
             <span className="login-form__input-name">E-mail</span>
             <input
+              disabled={formStatus === "sending" ? true : false}
               type="text"
               pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$"
               placeholder="E-mail"
@@ -62,6 +63,7 @@ function Login({ onSubmit, reqStatusMsg }) {
           <label className="login-form__form-field">
             <span className="login-form__input-name">Пароль</span>
             <input
+              disabled={formStatus === "sending" ? true : false}
               type="password"
               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
               placeholder="Пароль"
@@ -84,12 +86,12 @@ function Login({ onSubmit, reqStatusMsg }) {
           <input
             type="submit"
             className={
-              emailIsValid && passwordIsValid
+              emailIsValid && passwordIsValid && formStatus !== "sending"
                 ? "login-form__submit button"
                 : "login-form__submit disabled-button"
             }
             value="Войти"
-            disabled={emailIsValid && passwordIsValid ? false : true}
+            disabled={emailIsValid && passwordIsValid && formStatus !== "sending" ? false : true}
           />
         </form>
         <p className="login__auth-block">

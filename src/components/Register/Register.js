@@ -4,7 +4,7 @@ import "./Register.css";
 import "../../utils/shared.css";
 import logo from "../../images/logo.svg";
 
-function Register({ onSubmit, reqStatusMsg }) {
+function Register({ onSubmit, reqStatusMsg, formStatus }) {
   const [email, setEmail] = React.useState("");
   const [name, setName] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -23,6 +23,7 @@ function Register({ onSubmit, reqStatusMsg }) {
     setNameIsValid(evt.target.validity.valid);
     setName(evt.target.value);
   }
+
   const handleEmailChange = (evt) => {
     setEmailValidationMessage(
       !evt.target.validity.valid
@@ -31,6 +32,7 @@ function Register({ onSubmit, reqStatusMsg }) {
     setEmailIsValid(evt.target.validity.valid);
     setEmail(evt.target.value);
   }
+
   const handlePasswordChange = (evt) => {
     setPasswordValidationMessage(
       !evt.target.validity.valid
@@ -56,6 +58,7 @@ function Register({ onSubmit, reqStatusMsg }) {
           <label className="register-form__form-field">
             <span className="register-form__input-name">Имя</span>
             <input
+              disabled={formStatus === "sending" ? true : false}
               type="text"
               pattern="^[a-zA-Zа-яёА-ЯЁ][a-zA-Zа-яёА-ЯЁ0-9-\.]*$"
               placeholder="Имя"
@@ -77,6 +80,7 @@ function Register({ onSubmit, reqStatusMsg }) {
           <label className="register-form__form-field">
             <span className="register-form__input-name">E-mail</span>
             <input
+              disabled={formStatus === "sending" ? true : false}
               type="text"
               pattern="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$"
               placeholder="E-mail"
@@ -96,6 +100,7 @@ function Register({ onSubmit, reqStatusMsg }) {
           <label className="register-form__form-field">
             <span className="register-form__input-name">Пароль</span>
             <input
+              disabled={formStatus === "sending" ? true : false}
               type="password"
               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
               placeholder="Пароль"
@@ -118,12 +123,12 @@ function Register({ onSubmit, reqStatusMsg }) {
           <input
             type="submit"
             className={
-              emailIsValid && nameIsValid && passwordIsValid
+              emailIsValid && nameIsValid && passwordIsValid && formStatus !== "sending"
                 ? "register-form__submit button"
                 : "register-form__submit disabled-button"
             }
             value="Зарегистрироваться"
-            disabled={emailIsValid && nameIsValid && passwordIsValid ? false : true}
+            disabled={emailIsValid && nameIsValid && passwordIsValid && formStatus !== "sending" ? false : true}
           />
         </form>
         <p className="register__auth-block">
