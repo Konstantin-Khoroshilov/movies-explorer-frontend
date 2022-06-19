@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import "./App.css";
 import "../../vendor/styles/normalize.css";
 import "../../vendor/fonts/fonts.css";
@@ -10,179 +10,189 @@ import Login from "../Login/Login";
 import NotFound from "../NotFound/NotFound";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+import mainApi from "../../utils/MainApi";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 function App() {
+  const history = useHistory();
   const [navigationVisible, setNavigationVisible] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [reqStatusMsg, setReqStatusMsg] = React.useState("");
+  const [formStatus, setFormStatus]= React.useState("notSending");
+
   const handleCloseClick = () => {
     setNavigationVisible(false);
   }
   const handleMenuClick = () => {
     setNavigationVisible(true);
   }
-  const cardsLoadStatus = "success";
-  const savedMovies = [
-    {
-      name: "В погоне за Бенкси. Бежим, бежим, бежим",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 1,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 2,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 6,
-    },
-    {
-      name: "В погоне за Бенкси. Бежим, бежим, бежим",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 7,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 11,
-    },
-  ];
-  const movies = [
-    {
-      name: "В погоне за Бенкси. Бежим, бежим, бежим",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 1,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 2,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 3,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 4,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 5,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 6,
-    },
-    {
-      name: "В погоне за Бенкси. Бежим, бежим, бежим",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 7,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 8,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 9,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 10,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: true,
-      _id: 11,
-    },
-    {
-      name: "В погоне за Бенкси",
-      duration: "27 минут",
-      image: "https://api.interior.ru/media/images/setka/2020_05_31/banksy.jpg.webp",
-      saved: false,
-      _id: 12,
-    },
-  ];
+
+  async function errHandler(err) {
+    const errMsg = await err.text();
+    if (errMsg) {
+      const parsedErrMsg = JSON.parse(errMsg);
+      if (parsedErrMsg.message === "celebrate request validation failed") {
+        setReqStatusMsg(parsedErrMsg.validation.body.message)
+      } else {
+        setReqStatusMsg(parsedErrMsg.message);
+      }
+    } else {
+      setReqStatusMsg(err);
+    }
+  }
+
+  async function onRegister(name, email, password) {
+    setReqStatusMsg("...");
+    setFormStatus("sending");
+    try {
+      const tokenRequest = await mainApi.signup(name, email, password);
+      const token = await tokenRequest;
+      const user = await mainApi.getUserInfo(`Bearer ${token.token}`);
+      setCurrentUser(user);
+      localStorage.setItem("token", `Bearer ${token.token}`);
+      setLoggedIn(true);
+      history.push("/movies");
+    } catch (err) {
+      errHandler(err);
+    } finally {
+      setFormStatus("notSending");
+      setTimeout(() => {
+        setReqStatusMsg("");
+      }, 1000);
+    }
+  }
+
+  async function onLogin(email, password) {
+    setReqStatusMsg("...");
+    setFormStatus("sending");
+    try {
+      const tokenRequest = await mainApi.signin(email, password);
+      const token = await tokenRequest;
+      const user = await mainApi.getUserInfo(`Bearer ${token.token}`);
+      setCurrentUser(user);
+      localStorage.setItem("token", `Bearer ${token.token}`);
+      setLoggedIn(true);
+      history.push("/movies");
+    } catch (err) {
+      errHandler(err);
+    } finally {
+      setFormStatus("notSending");
+      setTimeout(() => {
+        setReqStatusMsg("");
+      }, 1000);
+    }
+  }
+
+  async function handleUserUpdate(email, password) {
+    setReqStatusMsg("...");
+    setFormStatus("sending");
+    try {
+      const userRequest = await mainApi.updateUserInfo(email, password, localStorage.getItem("token"));
+      const user = await userRequest;
+      setCurrentUser(user);
+      setReqStatusMsg("Данные успешно обновлены!");
+    } catch (err) {
+      errHandler(err);
+    } finally {
+      setFormStatus("notSending");
+      setTimeout(() => {
+        setReqStatusMsg("");
+      }, 1000);
+    }
+  }
+
+  const onSignOut = () => {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+    history.push("/");
+  }
+
+  React.useEffect(() => {
+    let cleanupFunction = false;
+    const token = localStorage.getItem("token");
+    if (token !== null) {
+      mainApi.getUserInfo(token)
+        .then((user) => {
+          if (!cleanupFunction) {
+            setLoggedIn(true);
+            setCurrentUser(user);
+          }
+          history.push("/movies");
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setTimeout(() => {
+            if (!cleanupFunction) setReqStatusMsg("");
+          }, 1000);
+        })
+    }
+    return () => cleanupFunction = true;
+  }, []);
+
   return (
-    <Switch>
-      <Route exact path ="/">
-        <Main />
-      </Route>
-      <Route path ="/movies">
-        <Movies
+    <CurrentUserContext.Provider value={currentUser}>
+      <Switch>
+        <ProtectedRoute
+          path="/movies"
+          loggedIn={loggedIn}
+          component={Movies}
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
           handleMenuClick={handleMenuClick}
-          movies={movies}
-          cardsLoadStatus={cardsLoadStatus}
+          storedData={
+            JSON.parse(localStorage.getItem("movies"))
+              ? JSON.parse(localStorage.getItem("movies"))
+              : false
+          }
         />
-      </Route>
-      <Route path ="/saved-movies">
-        <SavedMovies
+        <ProtectedRoute
+          path="/saved-movies"
+          loggedIn={loggedIn}
+          component={SavedMovies}
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
           handleMenuClick={handleMenuClick}
-          movies={savedMovies}
-          cardsLoadStatus={cardsLoadStatus}
+          storedData={
+            JSON.parse(localStorage.getItem("savedMoviesFilter"))
+              ? JSON.parse(localStorage.getItem("savedMoviesFilter"))
+              : false
+          }
         />
-      </Route>
-      <Route path ="/profile">
-        <Profile
+        <ProtectedRoute
+          path="/profile"
+          loggedIn={loggedIn}
+          component={Profile}
           navigationVisible={navigationVisible}
           handleCloseClick={handleCloseClick}
           handleMenuClick={handleMenuClick}
+          reqStatusMsg={reqStatusMsg}
+          handleUserUpdate={handleUserUpdate}
+          onLogout={onSignOut}
+          formStatus={formStatus}
         />
-      </Route>
-      <Route path ="/signin">
-        <Login />
-      </Route>
-      <Route path ="/signup">
-        <Register />
-      </Route>
-      <Route path="*">
-        <NotFound />
-      </Route>
-    </Switch>
+        <Route exact path="/">
+          <Main
+            loggedIn={loggedIn}
+            navigationVisible={navigationVisible}
+            handleCloseClick={handleCloseClick}
+            handleMenuClick={handleMenuClick}
+          />
+        </Route>
+        <Route path="/signin">
+          <Login onSubmit={onLogin} reqStatusMsg={reqStatusMsg} formStatus={formStatus} />
+        </Route>
+        <Route path="/signup">
+          <Register onSubmit={onRegister} reqStatusMsg={reqStatusMsg} formStatus={formStatus} />
+        </Route>
+        <Route path="*">
+          <NotFound />
+        </Route>
+      </Switch>
+    </CurrentUserContext.Provider>
   );
 }
 

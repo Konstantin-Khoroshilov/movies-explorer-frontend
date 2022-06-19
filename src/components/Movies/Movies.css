@@ -1,6 +1,13 @@
+.page {
+  background: #FAFAFA;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .movies {
   padding: 70px 70px 80px 70px;
-  background: #FAFAFA;
 }
 
 .movies__more-button {
@@ -15,9 +22,32 @@
   line-height: 1.25;
 }
 
+.movies__more-button_hidden {
+  display: none;
+}
+
+.movies__search-result_hidden {
+  display: none;
+}
+
+.movies__search-status {
+  margin: 0;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.21;
+}
+
 @media screen and (max-width: 768px) {
   .movies {
     padding: 70px 30px 80px 30px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .movies__search-status {
+    font-size: 18px;
+    line-height: 1.22;
+    text-align: center;
   }
 }
 

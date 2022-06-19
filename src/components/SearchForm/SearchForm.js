@@ -2,21 +2,21 @@ import React from "react";
 import "./SearchForm.css";
 import "../../utils/shared.css";
 
-function SearchForm() {
+function SearchForm({ onSubmit, onChange, onSwitch, searchQuery, switchOn }) {
   return (
-    <form className="search-form">
+    <form onSubmit={onSubmit} className="search-form">
       <label className="search-form__search-string">
-        <input className="search-form__text" type="text" placeholder="Фильм" />
+        <input className="search-form__text" type="text" placeholder="Фильм" onChange={onChange} value={searchQuery} />
         <button className="search-form__submit button" type="submit"><span className="search-form__button"></span></button>
       </label>
       <label className="search-form__short-films" tabIndex="0">
         <div className="switch">
-          <input type="checkbox" defaultChecked />
+          <input type="checkbox" onChange={onSwitch} defaultChecked={switchOn} />
           <span className="slider round"></span>
         </div>
-        <span className="search-form__short-films-title">Короткометражки</span>
+        <span className="search-form__short-films-title link">Короткометражки</span>
       </label>
-    </form> 
+    </form>
   );
 }
 export default SearchForm;

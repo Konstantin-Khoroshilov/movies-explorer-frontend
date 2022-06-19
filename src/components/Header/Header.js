@@ -1,19 +1,19 @@
 import React from "react";
-import { Link } from 'react-router-dom';  
+import { Link } from 'react-router-dom';
 import "./Header.css";
 import logo from "../../images/logo.svg";
 import profileIcon from "../../images/profile-icon.svg";
 import "../../utils/shared.css";
 
-function Header({ place, handleMenuClick }) {
-  if (place === "Main") {
+function Header({ place, handleMenuClick, loggedIn }) {
+  if (place === "Main" && !loggedIn) {
     return (
       <header className="header">
         <Link className="link" to="/">
           <img className="header__logo" alt="Логотип" src={logo} />
         </Link>
         <nav className="header__link-container">
-          <ul className= "elements-list">
+          <ul className="elements-list">
             <li>
               <Link className="header__register-link link" to="/signup">Регистрация</Link>
             </li>
@@ -22,6 +22,39 @@ function Header({ place, handleMenuClick }) {
             </li>
           </ul>
         </nav>
+      </header>
+    );
+  }
+
+  if (place === "Main" && loggedIn) {
+    return (
+      <header className="header">
+        <Link className="link" to="/">
+          <img className="header__logo" alt="Логотип" src={logo} />
+        </Link>
+        <nav className="header__link-container header__link-container_place_movies">
+          <ul className="elements-list">
+            <li>
+              <Link className="header__movies link" to="/movies">Фильмы</Link>
+            </li>
+            <li>
+              <Link className="header__saved-movies link" to="/saved-movies">Сохранённые фильмы</Link>
+            </li>
+          </ul>
+          <ul className="elements-list">
+            <li>
+              <Link className="header__profile link" to="/profile">
+                Аккаунт
+                <img className="header__profile-icon" alt="Иконка профиля" src={profileIcon} />
+              </Link>
+            </li>
+          </ul>
+        </nav>
+        <div className="header__burger button" onClick={handleMenuClick} tabIndex="0">
+          <span className="header__burger-part"></span>
+          <span className="header__burger-part"></span>
+          <span className="header__burger-part"></span>
+        </div>
       </header>
     );
   }
@@ -45,7 +78,7 @@ function Header({ place, handleMenuClick }) {
             <li>
               <Link className="header__profile link" to="/profile">
                 Аккаунт
-                <img className="header__profile-icon" alt="Иконка профиля" src={profileIcon} /> 
+                <img className="header__profile-icon" alt="Иконка профиля" src={profileIcon} />
               </Link>
             </li>
           </ul>

@@ -2,6 +2,7 @@
   padding: 70px 0;
   background: #FAFAFA;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .login-form {
@@ -42,11 +43,17 @@
 }
 
 .login-form__text-input {
+  width: 100%;
   border: none;
   outline: none;
   background-color: #FAFAFA;
   font-size: 14px;
   line-height: 1.2;
+  padding: 0;
+}
+
+.login-form__text-input::placeholder {
+  font-size: 14px;
 }
 
 .login-form__error-message-container {
@@ -60,8 +67,18 @@
   margin-bottom: 24px;
 }
 
+.login-form__request-status-container {
+  min-height: 159px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 13px;
+  line-height: 1.23;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
 .login-form__submit {
-  margin-top: 221px;
   width: 100%;
   background-color: #3456F3;
   color: white;
@@ -117,8 +134,11 @@
     text-align: center;
   }
 
+  .login-form__request-status-container {
+    min-height: 247px;
+  }
+
   .login-form__submit {
-    margin-top: 309px;
     font-size: 12px;
     line-height: 1.25;
   }

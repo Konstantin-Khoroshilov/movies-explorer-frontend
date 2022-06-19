@@ -65,8 +65,18 @@
   margin-bottom: 16px;
 }
 
+.profile-form__request-status-container {
+  display: flex;
+  min-height: 204px;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 13px;
+  line-height: 1.23;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
 .profile-form__submit {
-  margin-top: 204px;
   background: none;
   border: none;
   outline: none;
@@ -99,9 +109,8 @@
   .profile-form__title {
     margin: 0 0 96px 0;
   }
-  
-  .profile-form__submit {
-    margin-top: 194px;
+  .profile-form__request-status-container {
+    min-height: 194px;
   }
 }
 
@@ -118,8 +127,11 @@
     margin: 0 0 80px 0;
   }
 
+  .profile-form__request-status-container {
+    min-height: 379px;
+  }
+
   .profile-form__submit {
-    margin-top: 379px;
     font-size: 12px;
     line-height: 1.25;
   }
