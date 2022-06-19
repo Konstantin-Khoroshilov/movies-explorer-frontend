@@ -1,0 +1,121 @@
+.about-project {
+  padding: 110px 70px;
+  box-sizing: border-box;
+  background-color: #FAFAFA;
+}
+
+.about-project__articles-container {
+  margin: 0 auto;
+  margin-top: 70px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 40px;
+  margin-bottom: 110px;
+}
+
+.about-project__article-title {
+  margin: 0 0 26px 0;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+
+.about-project__article-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.43;
+}
+
+.about-project__stages-container {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+
+.about-project__stage-duration {
+  margin: 0 0 14px 0;
+  background-color: #3456F3;
+  font-size: 14px;
+  line-height: 1.21;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.about-project__stage-duration_stage_frontend {
+  color: black;
+  background-color: #F2F2F2;
+}
+
+.about-project__stage-name {
+  text-align: center;
+  margin: 0;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.21;
+  color: #A0A0A0;
+}
+
+@media screen and (max-width: 768px){
+  .about-project {
+    padding: 90px 50px 90px 50px;
+  }
+
+  .about-project__articles-container {
+    grid-column-gap: 30px;
+    margin-bottom: 93px;
+  }
+
+  .about-project__article-text {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+@media screen and (max-width: 480px){
+  .section-header {
+    font-size: 18px;
+    line-height: 1.22;
+    padding-bottom: 28px;
+    margin: 0 0 60px 0;
+  }
+
+  .about-project {
+    padding: 70px 18px 70px 18px;
+  }
+
+  .about-project__articles-container {
+    grid-template-columns: 1fr;
+    grid-row-gap: 56px;
+    margin-bottom: 60px;
+  }
+
+  .about-project__article-title {
+    font-size: 18px;
+    margin: 0 0 16px 0;
+  }
+
+  .about-project__article-text {
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .about-project__stages-container {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .about-project__stage-duration {
+    margin: 0 0 10px 0;
+    min-height: 35px;
+    font-size: 11px;
+  }
+
+  .about-project__stage-name {
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 1.16;
+  }
+}

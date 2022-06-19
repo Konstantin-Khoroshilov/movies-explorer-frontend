@@ -1,0 +1,131 @@
+.register {
+  padding: 70px 0;
+  background: #FAFAFA;
+  min-height: 100vh;
+}
+
+.register-form {
+  margin: 0 auto;
+  margin-bottom: 16px;
+  width: 396px;
+}
+
+.register-form__logo {
+  margin-bottom: 40px;
+}
+
+.register-form__title {
+  margin: 0 0 40px 0;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.register-form__form-field {
+  border-bottom: 1px solid #E8E8E8;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.register-form__form-field:focus-within {
+  border-bottom: 1px solid #3456F3;
+}
+
+.register-form__input-name {
+  display: block;
+  font-size: 10px;
+  line-height: 1.2;
+  color: #A0A0A0;
+  margin-bottom: 5px;
+}
+
+.register-form__text-input {
+  border: none;
+  outline: none;
+  background-color: #FAFAFA;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.register-form__error-message-container {
+  display: block;
+  font-size: 10px;
+  line-height: 1.2;
+  color: #EE3465;
+}
+
+.register-form__error-message-container:not(:last-of-type) {
+  margin-bottom: 24px;
+}
+
+.register-form__submit {
+  margin-top: 134px;
+  width: 100%;
+  background-color: #3456F3;
+  color: white;
+  min-height: 45px;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.21;
+}
+
+.register__auth-block {
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.21;
+  color: #A0A0A0;
+}
+
+.register__auth-link {
+  text-decoration: none;
+  color: #3456F3;
+  transition: opacity .3s linear;
+}
+
+.register__auth-link:hover {
+  opacity: .7;
+}
+
+@media screen and (max-width: 768px) {
+  .register {
+    padding: 232px 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .register {
+    padding: 56px 0px 30px 0px;
+  }
+  
+  .register-form {
+    margin-bottom: 14px;
+    width: 81.25%;
+  }
+  
+  .register-form__logo {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 50px;
+  }
+
+  .register-form__title {
+    margin: 0 0 80px 0;
+    text-align: center;
+  }
+
+  .register-form__submit {
+    margin-top: 222px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .register__auth-block {
+    font-size: 12px;
+    line-height: 1.25;
+  }
+}
+

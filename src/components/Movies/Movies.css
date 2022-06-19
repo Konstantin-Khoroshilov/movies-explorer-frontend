@@ -1,0 +1,28 @@
+.movies {
+  padding: 70px 70px 80px 70px;
+  background: #FAFAFA;
+}
+
+.movies__more-button {
+  width: 100%;
+  margin-top: 50px;
+  min-height: 36px;
+  background-color: #F4F4F4;
+  border-radius: 6px;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+@media screen and (max-width: 768px) {
+  .movies {
+    padding: 70px 30px 80px 30px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .movies {
+    padding: 40px 10px 80px 10px;
+  }
+}
